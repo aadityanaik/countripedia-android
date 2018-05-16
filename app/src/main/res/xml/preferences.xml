@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="settings_preferences">
+
+    <PreferenceCategory
+        android:key="themes"
+        android:title="Theme Settings"
+        android:summary="Set your theme choice">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefTheme"
+            android:summary="Switches to dark theme"
+            android:title="Use Dark Theme"
+            android:id="@+id/themepreference" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Connection Settings"
+        android:summary="conections">
+        <SwitchPreference
+            android:key="connections_media_load"
+            android:title="Load media when using mobile data?"
+            android:summary="Media loads only via WiFi if off"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
