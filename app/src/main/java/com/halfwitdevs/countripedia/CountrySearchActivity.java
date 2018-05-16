@@ -31,8 +31,11 @@ import java.util.Vector;
 
 public class CountrySearchActivity extends AppCompatActivity {
 
+    final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_search);
 
@@ -67,6 +70,7 @@ public class CountrySearchActivity extends AppCompatActivity {
 
     private class GetCountryList extends AsyncTask<String, Void, String> {
         // using v4 cuz reasons
+        RetainedFragment retainedFragment;
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
         ProgressFragment progressFragment;
@@ -77,17 +81,28 @@ public class CountrySearchActivity extends AppCompatActivity {
 
             // setting up the progress bar
             progressFragment = new ProgressFragment();
-            transaction.add(R.id.list_fragment_container, progressFragment);
+            transaction.replace(R.id.list_fragment_container, progressFragment);
             transaction.commit();
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            try {
-                return new URLHandler(strings[0]).getResponse();
-            } catch (MalformedURLException e) {
-                return null;
+            String jsonString = null;
+            retainedFragment = (RetainedFragment) fragmentManager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+            if(retainedFragment == null) {
+                try {
+                    jsonString =  new URLHandler(strings[0]).getResponse();
+                    retainedFragment = new RetainedFragment();
+                    retainedFragment.setData(jsonString);
+                    fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
+                } catch (MalformedURLException e) {
+                    return null;
+                }
+            } else {
+                jsonString = retainedFragment.getData();
             }
+
+            return jsonString;
         }
 
         @Override
