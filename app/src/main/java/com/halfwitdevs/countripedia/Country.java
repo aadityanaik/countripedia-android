@@ -317,13 +317,13 @@ public class Country {
                     @Override
                     protected String[] doInBackground(Void... voids) {
                         Neighbour[] countryNameList;
+                        HttpsURLConnection connection = null;
                         try {
                             StringBuilder borderCodes = new StringBuilder();
                             for (String border : borders) {
                                 borderCodes.append(border).append(";");
                             }
 
-                            HttpsURLConnection connection;
                             connection = (HttpsURLConnection) new URL("https://restcountries.eu/rest/v2/alpha?codes=" + borderCodes.toString() + "&fields=name").openConnection();
                             connection.setRequestMethod("GET");
                             connection.setRequestProperty("Accept", "application/json");
@@ -349,6 +349,9 @@ public class Country {
 
                             return output;
                         } catch (IOException e) {
+                            if(connection != null) {
+                                connection.disconnect();
+                            }
                             return null;
                         }
                     }

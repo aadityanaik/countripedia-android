@@ -43,15 +43,14 @@ public class CountryInfoDisplayFragment extends Fragment {
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                         String groupName = adapter.getGroup(groupPosition).toString();
                         String childName = adapter.getChild(groupPosition, childPosition).toString();
-                        Intent intent;
+                        Intent intent = new Intent(getContext(), MoreInfoActivity.class);
+                        Bundle args = new Bundle();
 
                         switch (groupName) {
                             case "General Info":
                                 switch ((childName.indexOf(':') != -1) ? childName.substring(0, childName.indexOf(':')) : childName) {
                                     case "Name":
-                                        intent = new Intent(getContext(), MoreInfoActivity.class);
 
-                                        Bundle args = new Bundle();
                                         // action defines what the more info activity will show
                                         args.putString("ACTION", "MAP");
 
@@ -71,10 +70,41 @@ public class CountryInfoDisplayFragment extends Fragment {
                                         break;
 
                                     case "Capital":
+                                        // similar system to previous
+                                        // however here we don't have the lat lng for capital
+                                        // so we pass capital name & country name
+                                        // and get the lat lng using geocoder
+
+                                        args.putString("ACTION", "MAP");
+                                        args.putString("CATEGORY", "CAPITAL");
+                                        args.putString("CAPNAME", country.capital);
+                                        args.putString("COUNTRYNAME", country.name);
+
+                                        intent.putExtras(args);
+
+                                        startActivity(intent);
 
                                         break;
 
                                     case "Region":
+                                        // Quite similar to previous
+                                        // passing subregion (if available) and region
+
+                                        String rgn = "";
+
+                                        if(country.subregion != null && !country.subregion.equals("")) {
+                                            rgn += country.subregion + ",";
+                                        }
+
+                                        rgn += country.region;
+
+                                        args.putString("ACTION", "MAP");
+                                        args.putString("CATEGORY", "REGION");
+                                        args.putString("RGN", rgn);
+
+                                        intent.putExtras(args);
+
+                                        startActivity(intent);
 
                                         break;
 

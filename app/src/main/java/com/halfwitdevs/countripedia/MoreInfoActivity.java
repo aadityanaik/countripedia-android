@@ -19,6 +19,10 @@ public class MoreInfoActivity extends AppCompatActivity {
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.info_container, mapFragment).commit();
+
+                break;
+
+
         }
 
     }

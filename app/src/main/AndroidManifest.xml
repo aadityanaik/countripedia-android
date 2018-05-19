@@ -21,15 +21,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
 
-        <activity android:name=".CountrySearchActivity">
+        <activity android:name=".CountrySearchActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CountryInfoDisplayActivity" />
-        <activity android:name=".MoreInfoActivity" />
+        <activity android:name=".CountryInfoDisplayActivity"
+            android:configChanges="orientation" />
+        <activity android:name=".MoreInfoActivity"
+            android:configChanges="orientation" />
     </application>
 
 </manifest>

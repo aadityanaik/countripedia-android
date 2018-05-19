@@ -120,7 +120,6 @@ public class CountrySearchActivity extends AppCompatActivity {
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.list_fragment_container, countryListFragment);
                 transaction.commit();
-                Toast.makeText(CountrySearchActivity.this, "OK", Toast.LENGTH_SHORT).show();
             }
         }
     }
