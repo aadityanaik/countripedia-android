@@ -109,6 +109,11 @@ public class CountryInfoDisplayFragment extends Fragment {
                                         break;
 
                                     case "Population":
+                                        args.putString("ACTION", "POP");
+                                        args.putString("CODE", country.alpha2Code);
+                                        args.putString("NAME", country.name);
+                                        intent.putExtras(args);
+                                        startActivity(intent);
 
                                         break;
 
