@@ -12,8 +12,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -25,11 +32,17 @@ import com.google.gson.Gson;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.net.MalformedURLException;
+import java.sql.Ref;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
 public class CountrySearchActivity extends AppCompatActivity {
+
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    Toolbar toolbar;
+    NavigationView navigationView;
 
     final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
 
@@ -38,6 +51,8 @@ public class CountrySearchActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_search);
+
+        navgationDrawerAndToolbar();
 
         try {
             ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -66,6 +81,79 @@ public class CountrySearchActivity extends AppCompatActivity {
             AlertDialog errorDialog = builder.create();
             errorDialog.show();
         }
+    }
+
+    private void navgationDrawerAndToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        setDrawerContent(navigationView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectDrawerItem(item);
+                return true;
+            }
+        });
+    }
+
+    private void selectDrawerItem(MenuItem menuItem) {
+        android.support.v4.app.Fragment fragment = null;
+        Class FragmentClass = null;
+        switch (menuItem.getItemId()) {
+            case R.id.home:
+                FragmentClass = CountryListFragment.class;
+                break;
+            case R.id.settings:
+                break;
+            case R.id.bookmarks:
+                FragmentClass = BookmarkFragment.class;
+                break;
+            case R.id.references:
+                FragmentClass = ReferencesFragment.class;
+                break;
+            case R.id.help:
+                FragmentClass = HelpFragment.class;
+                break;
+            case R.id.about:
+                FragmentClass = AboutFragment.class;
+                break;
+            default:
+                break;
+        }
+
+        try{
+            fragment = (android.support.v4.app.Fragment)FragmentClass.newInstance();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
+        if (currentFragment == null){
+            fragmentManager.beginTransaction().add(R.id.list_fragment_container, fragment).commit();
+        }
+        else {
+            fragmentManager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
+        }
+        menuItem.setChecked(true);
+        setTitle(menuItem.getTitle());
+        drawerLayout.closeDrawers();
     }
 
     private class GetCountryList extends AsyncTask<String, Void, String> {

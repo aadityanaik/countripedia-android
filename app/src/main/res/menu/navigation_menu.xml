@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/countrypedia_title"
+        android:title="COUNTRIPEDIA"
+        android:checkable="false" />
+
+    <group android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/home"
+            android:title="Home"
+            android:icon="@drawable/icon_home" />
+
+        <item
+            android:id="@+id/settings"
+            android:title="Settings"
+            android:icon="@drawable/icon_settings" />
+
+        <item
+            android:id="@+id/bookmarks"
+            android:title="Bookmarks"
+            android:icon="@drawable/ic_collections_bookmark_black_24dp" />
+
+        <item
+            android:id="@+id/references"
+            android:title="References"
+            android:icon="@drawable/icon_references" />
+
+        <item
+            android:id="@+id/help"
+            android:title="Help"
+            android:icon="@drawable/icon_help" />
+
+        <item
+            android:id="@+id/about"
+            android:title="About"
+            android:icon="@drawable/ic_info_outline_black_24dp" />
+
+    </group>
+
+</menu>
