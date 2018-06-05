@@ -88,6 +88,7 @@ public class CountrySearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_menu);
         setDrawerContent(navigationView);
     }
 
@@ -102,7 +103,7 @@ public class CountrySearchActivity extends AppCompatActivity {
     }
 
     private void setDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 selectDrawerItem(item);

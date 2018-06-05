@@ -60,7 +60,8 @@ public class BookmarkFragment extends Fragment{
                                 bookmarkDatabaseAdapter.deleteCountry(nameCode[0]);
                                 bookmarks.remove(position);
                                 Toast.makeText(getActivity(), nameCode[0] + " deleted", Toast.LENGTH_SHORT).show();
-                                recreate();
+                                getFragmentManager().beginTransaction().detach(BookmarkFragment.this)
+                                        .attach(BookmarkFragment.this).commit();
                             }
                         });
                         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -85,10 +86,10 @@ public class BookmarkFragment extends Fragment{
         bookmarks = bookmarkDatabaseAdapter.dataBaseToString();
         System.out.println(bookmarks.toString());
         if (bookmarks.size() > 0) {
-            adapterBookmarkList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, bookmarks);
+            adapterBookmarkList = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, bookmarks);
         } else {
             bookmarks.add("No bookmarks yet!");
-            adapterBookmarkList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, bookmarks);
+            adapterBookmarkList = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, bookmarks);
         }
         bookmarkList = view.findViewById(R.id.bookmarkList);
         bookmarkList.setAdapter(adapterBookmarkList);
