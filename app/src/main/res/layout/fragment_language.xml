@@ -1,52 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_gravity="center">
+    android:layout_gravity="center_horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/graph_layout"
+        android:orientation="vertical"
+        android:id="@+id/language_info_layout"
         android:visibility="gone">
 
-        <android.support.v4.view.ViewPager
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/graph_pager">
+            android:layout_height="match_parent">
 
-            <android.support.v4.view.PagerTabStrip
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pager_title_strip"
+                android:id="@+id/info_language"
                 android:padding="10dp" />
-
-        </android.support.v4.view.ViewPager>
+        </ScrollView>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/prog_circle"
-        android:gravity="center_horizontal">
-
+        android:gravity="center_horizontal"
+        android:id="@+id/prog_circle">
         <ProgressBar
             android:layout_width="@dimen/progress_dim"
             android:layout_height="@dimen/progress_dim"
             android:padding="10dp"
             android:layout_gravity="center_horizontal"/>
-
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_error"
-        android:id="@+id/error_img"
-        android:visibility="gone"/>
-
 
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.halfwitdevs.countripedia;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CountryListFragment extends Fragment {
     @Nullable
@@ -20,9 +22,11 @@ public class CountryListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_country_list, container, false);
 
         if(getArguments() != null) {
-            final CountryNames[] array = (CountryNames[]) getArguments().getParcelableArray("COUNTRYLIST");
+            final Parcelable[] parcelableArray = getArguments().getParcelableArray("COUNTRYLIST");
+
             ListView countryListView = view.findViewById(R.id.country_list_view);
             try {
+                final CountryNames[] array =  Arrays.copyOf(parcelableArray, parcelableArray.length, CountryNames[].class);
                 final CountrySearchListAdapter adapter = new CountrySearchListAdapter(getContext(), array, true);
                 countryListView.setAdapter(adapter);
                 countryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -37,6 +41,7 @@ public class CountryListFragment extends Fragment {
                     }
                 });
             } catch(NullPointerException e) {
+                e.printStackTrace();
 
             }
         }
