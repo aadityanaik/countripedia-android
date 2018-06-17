@@ -8,11 +8,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,6 +47,9 @@ public class CountrySearchActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
     NavigationView navigationView;
+    MaterialSearchView materialSearchView;
+    MenuItem searchItem;
+    MenuItem refreshItem;
 
     final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
 
@@ -86,18 +93,43 @@ public class CountrySearchActivity extends AppCompatActivity {
     private void navgationDrawerAndToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         drawerLayout = findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = drawerToggle();
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
         navigationView = findViewById(R.id.navigation_menu);
         setDrawerContent(navigationView);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private ActionBarDrawerToggle drawerToggle() {
+        return new ActionBarDrawerToggle(CountrySearchActivity.this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        //drawerToggle().syncState();
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle().onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        /*
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+        }
+        */
+        if(drawerToggle().onOptionsItemSelected(item)){
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -134,6 +166,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                 FragmentClass = AboutFragment.class;
                 break;
             default:
+                FragmentClass = CountryListFragment.class;
                 break;
         }
 
@@ -203,6 +236,21 @@ public class CountrySearchActivity extends AppCompatActivity {
                 CountryNames[] countryNamesArray = parser.fromJson(s, CountryNames[].class);
                 CountryListFragment countryListFragment = new CountryListFragment();
                 Bundle args = new Bundle();
+
+                //search stuff
+                /*
+                materialSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+                    @Override
+                    public void onSearchViewShown() {
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    }
+
+                    @Override
+                    public void onSearchViewClosed() {
+
+                    }
+                });*/
+
                 args.putParcelableArray("COUNTRYLIST", countryNamesArray);
                 countryListFragment.setArguments(args);
 
@@ -211,6 +259,16 @@ public class CountrySearchActivity extends AppCompatActivity {
                 transaction.commit();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.search_menu, menu);
+        searchItem = menu.findItem(R.id.filter_search);
+        //materialSearchView.setMenuItem(searchItem);       this one is giving a null pointer exception
+        refreshItem = menu.findItem(R.id.referesh_button);
+        return true;
     }
 
     public static class ViewHolder {
