@@ -24,7 +24,7 @@ public class AboutFragment extends Fragment {
             "Learn about the population growth and  distribution through an interactive graph " +
             "or the exchange rate of a country's currency.";
 
-    final String[] CREATORLIST = {"Aaditya Naik", "Aditya Chakraborti", "Diksha Maheshwari"};
+    final String[] CREATORLIST = {"Aaditya Naik", "Aditya Chakraborti"};
 
     @Nullable
     @Override
