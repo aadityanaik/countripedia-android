@@ -261,8 +261,10 @@ public class CountrySearchActivity extends AppCompatActivity {
         }
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.search_menu, menu);
         searchItem = menu.findItem(R.id.filter_search);
@@ -270,6 +272,7 @@ public class CountrySearchActivity extends AppCompatActivity {
         refreshItem = menu.findItem(R.id.referesh_button);
         return true;
     }
+    */
 
     public static class ViewHolder {
         public TextView countryTextView;
