@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,6 +24,11 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean("prefTheme", false)) {
+            setTheme(R.style.DarkAppTheme);
+        } else {
+            setTheme(R.style.LightAppTheme);
+        }
         bookmarkDatabaseAdapter = new BookmarkDatabaseAdapter(this, null, null, 1);
         setContentView(R.layout.activity_country_info_display);
 

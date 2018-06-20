@@ -3,6 +3,7 @@ package com.halfwitdevs.countripedia;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.mikephil.charting.data.Entry;
@@ -22,6 +23,11 @@ public class MoreInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean("prefTheme", false)) {
+            setTheme(R.style.DarkAppTheme);
+        } else {
+            setTheme(R.style.LightAppTheme);
+        }
         setContentView(R.layout.activity_more_info);
 
         Bundle args = getIntent().getExtras();

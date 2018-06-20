@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,6 +43,7 @@ import java.util.Comparator;
 import java.util.Vector;
 
 public class CountrySearchActivity extends AppCompatActivity {
+    public static boolean startInSettings = false;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -52,41 +54,57 @@ public class CountrySearchActivity extends AppCompatActivity {
     MenuItem refreshItem;
 
     final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
+    final String TAG_LIST = "CountryList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
+        if (PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean("prefTheme", false)) {
+            setTheme(R.style.DarkAppTheme);
+        } else {
+            setTheme(R.style.LightAppTheme);
+        }
         setContentView(R.layout.activity_country_search);
 
         navgationDrawerAndToolbar();
 
-        try {
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            if (activeNetwork.isConnected()) {
-                new GetCountryList().
-                        execute("https://restcountries.eu/rest/v2/all/?fields=name;alpha2Code;flag");
+        if(startInSettings) {
+            startInSettings = false;
+            android.support.v4.app.Fragment fragment = new SettingsFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.list_fragment_container, fragment)
+                    .commit();
+            setTitle("Settings");
+        } else {
+            try {
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                if (activeNetwork.isConnected()) {
+                    new GetCountryList().
+                            execute("https://restcountries.eu/rest/v2/all/?fields=name;alpha2Code;flag");
+                }
+            } catch (Exception e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CountrySearchActivity.this);
+                builder.setTitle("Error")
+                        .setMessage("Could not retrieve data\nCheck your Internet connection");
+                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        recreate();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                AlertDialog errorDialog = builder.create();
+                errorDialog.show();
             }
-        } catch (Exception e) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CountrySearchActivity.this);
-            builder.setTitle("Error")
-                    .setMessage("Could not retrieve data\nCheck your Internet connection");
-            builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    recreate();
-                }
-            });
-
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-
-            AlertDialog errorDialog = builder.create();
-            errorDialog.show();
         }
     }
 
@@ -146,12 +164,27 @@ public class CountrySearchActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem menuItem) {
         android.support.v4.app.Fragment fragment = null;
+        android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
         Class FragmentClass = null;
+        String tag = null;
         switch (menuItem.getItemId()) {
             case R.id.home:
-                FragmentClass = CountryListFragment.class;
+                RetainedFragment retainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+                if(retainedFragment != null && retainedFragment.getData() != null) {
+                    String s = retainedFragment.getData();
+                    Gson parser = new Gson();
+                    CountryNames[] countryNamesArray = parser.fromJson(s, CountryNames[].class);
+                    fragment = new CountryListFragment();
+                    Bundle args = new Bundle();
+                    args.putParcelableArray("COUNTRYLIST", countryNamesArray);
+                    fragment.setArguments(args);
+                    tag = TAG_LIST;
+                } else {
+                    recreate();
+                }
                 break;
             case R.id.settings:
+                FragmentClass = SettingsPreference.class;
                 break;
             case R.id.bookmarks:
                 FragmentClass = BookmarkFragment.class;
@@ -165,25 +198,31 @@ public class CountrySearchActivity extends AppCompatActivity {
             case R.id.about:
                 FragmentClass = AboutFragment.class;
                 break;
-            default:
-                FragmentClass = CountryListFragment.class;
-                break;
         }
 
         try{
-            fragment = (android.support.v4.app.Fragment)FragmentClass.newInstance();
+            if(fragment == null)
+                fragment = (android.support.v4.app.Fragment)FragmentClass.newInstance();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
-        if (currentFragment == null){
-            fragmentManager.beginTransaction().add(R.id.list_fragment_container, fragment).commit();
-        }
-        else {
-            fragmentManager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
+        if(tag != null) {
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            android.support.v4.app.Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
+            if (currentFragment == null) {
+                fragmentManager.beginTransaction().add(R.id.list_fragment_container, fragment).commit();
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
+            }
+        } else {
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            android.support.v4.app.Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
+            if (currentFragment == null) {
+                fragmentManager.beginTransaction().add(R.id.list_fragment_container, fragment, tag).commit();
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.list_fragment_container, fragment, tag).commit();
+            }
         }
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
@@ -255,7 +294,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                 countryListFragment.setArguments(args);
 
                 transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.list_fragment_container, countryListFragment);
+                transaction.replace(R.id.list_fragment_container, countryListFragment, TAG_LIST);
                 transaction.commit();
             }
         }
