@@ -49,9 +49,11 @@ public class CountrySearchActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     Toolbar toolbar;
     NavigationView navigationView;
+    public Boolean selectedFragmentFlag;
     MaterialSearchView materialSearchView;
     MenuItem searchItem;
     MenuItem refreshItem;
+    //boolean doubleBackToExitPressedOnce = false;        //for Press Back Button Twice
 
     final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
     final String TAG_LIST = "CountryList";
@@ -60,6 +62,7 @@ public class CountrySearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(null);
+        selectedFragmentFlag = false;
         if (PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getBoolean("prefTheme", false)) {
             setTheme(R.style.DarkAppTheme);
         } else {
@@ -127,7 +130,6 @@ public class CountrySearchActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        //drawerToggle().syncState();
         actionBarDrawerToggle.syncState();
     }
 
@@ -139,13 +141,6 @@ public class CountrySearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        */
         if(drawerToggle().onOptionsItemSelected(item)){
             return true;
         }
@@ -169,6 +164,8 @@ public class CountrySearchActivity extends AppCompatActivity {
         String tag = null;
         switch (menuItem.getItemId()) {
             case R.id.home:
+                selectedFragmentFlag = false;
+
                 RetainedFragment retainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
                 if(retainedFragment != null && retainedFragment.getData() != null) {
                     String s = retainedFragment.getData();
@@ -184,18 +181,23 @@ public class CountrySearchActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.settings:
+                selectedFragmentFlag = true;
                 FragmentClass = SettingsPreference.class;
                 break;
             case R.id.bookmarks:
+                selectedFragmentFlag = true;
                 FragmentClass = BookmarkFragment.class;
                 break;
             case R.id.references:
+                selectedFragmentFlag = true;
                 FragmentClass = ReferencesFragment.class;
                 break;
             case R.id.help:
+                selectedFragmentFlag = true;
                 FragmentClass = HelpFragment.class;
                 break;
             case R.id.about:
+                selectedFragmentFlag = true;
                 FragmentClass = AboutFragment.class;
                 break;
         }
@@ -312,6 +314,42 @@ public class CountrySearchActivity extends AppCompatActivity {
         return true;
     }
     */
+
+    @Override
+    public void onBackPressed() {
+        if(!selectedFragmentFlag) {
+            super.onBackPressed();
+        }
+        else {
+            int size = navigationView.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigationView.getMenu().getItem(i).setChecked(false);
+            }
+            navigationView.getMenu().getItem(1).setChecked(true);
+            selectedFragmentFlag = false;
+
+            android.support.v4.app.Fragment fragment;
+            android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+            String tag = null;
+
+            RetainedFragment retainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+            if(retainedFragment != null && retainedFragment.getData() != null) {
+                String s = retainedFragment.getData();
+                Gson parser = new Gson();
+                CountryNames[] countryNamesArray = parser.fromJson(s, CountryNames[].class);
+                fragment = new CountryListFragment();
+                Bundle args = new Bundle();
+                args.putParcelableArray("COUNTRYLIST", countryNamesArray);
+                fragment.setArguments(args);
+                tag = TAG_LIST;
+                if(tag != null) {
+                    manager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
+                }
+            } else {
+                recreate();
+            }
+        }
+    }
 
     public static class ViewHolder {
         public TextView countryTextView;
