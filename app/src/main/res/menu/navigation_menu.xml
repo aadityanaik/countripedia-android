@@ -6,7 +6,7 @@
         android:title="COUNTRIPEDIA"
         android:checkable="false" />
 
-    <group android:checkableBehavior="none">
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/home"
