@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -22,18 +24,21 @@ import java.util.concurrent.ExecutionException;
 
 public class CountryInfoDisplayFragment extends Fragment {
     Country country;
+    BookmarkDatabaseAdapter bookmarkDatabaseAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         String countryInfoJson = null;
         View view = inflater.inflate(R.layout.fragment_country_info_display, container, false);
+        bookmarkDatabaseAdapter = new BookmarkDatabaseAdapter(getActivity(), null, null, 1);
+        setHasOptionsMenu(true);
 
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             countryInfoJson = getArguments().getString("COUNTRYINFO");
         }
 
-        if(countryInfoJson != null) {
+        if (countryInfoJson != null) {
             country = new Gson().fromJson(countryInfoJson, Country.class);
             try {
                 new ImageLoader((ImageView) view.findViewById(R.id.country_flag_image)).run();
@@ -94,7 +99,7 @@ public class CountryInfoDisplayFragment extends Fragment {
 
                                         String rgn = "";
 
-                                        if(country.subregion != null && !country.subregion.equals("")) {
+                                        if (country.subregion != null && !country.subregion.equals("")) {
                                             rgn += country.subregion + ",";
                                         }
 
@@ -190,5 +195,54 @@ public class CountryInfoDisplayFragment extends Fragment {
 
 
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        String countryInfoJson = null;
+
+        if (getArguments() != null) {
+            countryInfoJson = getArguments().getString("COUNTRYINFO");
+        }
+
+        if (countryInfoJson != null) {
+            country = new Gson().fromJson(countryInfoJson, Country.class);
+
+            int bookmarkID = 103;
+            if (menu.findItem(bookmarkID) == null) {
+                final MenuItem bookmark = menu.add(Menu.NONE, bookmarkID, 3, "Bookmark");
+
+                Bundle bundle = getActivity().getIntent().getExtras();
+                final String alpha2code = country.alpha2Code.toString();
+                final String countryName = country.name.toString();
+
+                if (!bookmarkDatabaseAdapter.checkIfPresent(countryName)) {
+                    bookmark.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                } else {
+                    bookmark.setIcon(R.drawable.ic_bookmark_black_24dp);
+                }
+                bookmark.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+                bookmark.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        final BookmarkObject bookmarkObject = new BookmarkObject(alpha2code, countryName);
+                        if (!bookmarkDatabaseAdapter.checkIfPresent(countryName)) {
+                            bookmarkDatabaseAdapter.addCountry(bookmarkObject);
+                            Toast.makeText(getActivity(), "Bookmark added!", Toast.LENGTH_SHORT).show();
+                            bookmark.setIcon(R.drawable.ic_bookmark_black_24dp);
+                        } else {
+                            bookmarkDatabaseAdapter.deleteCountry(countryName);
+                            Toast.makeText(getActivity(), "Bookmark removed!", Toast.LENGTH_SHORT).show();
+                            bookmark.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                        }
+                        return true;
+                    }
+                });
+
+            }
+        }
+        super.onPrepareOptionsMenu(menu);
     }
 }
