@@ -40,6 +40,7 @@ public class CountryListFragment extends Fragment {
                             CountryNames selected = array[position];
                             Intent intent = new Intent(getContext(), CountryInfoDisplayActivity.class);
                             intent.putExtra("COUNTRYCODE", selected.alpha2Code);
+                            intent.putExtra("COUNTRYNAME", selected.name);
                             startActivity(intent);
                         }
                     }

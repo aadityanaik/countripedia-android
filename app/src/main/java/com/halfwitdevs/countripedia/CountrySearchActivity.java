@@ -72,6 +72,8 @@ public class CountrySearchActivity extends AppCompatActivity {
 
         navgationDrawerAndToolbar();
 
+        drawerLayout.closeDrawers();
+
         if(startInSettings) {
             startInSettings = false;
             android.support.v4.app.Fragment fragment = new SettingsFragment();
@@ -178,6 +180,8 @@ public class CountrySearchActivity extends AppCompatActivity {
                     tag = TAG_LIST;
                 } else {
                     recreate();
+                    drawerLayout.closeDrawers();
+                    return;
                 }
                 break;
             case R.id.settings:
@@ -200,6 +204,9 @@ public class CountrySearchActivity extends AppCompatActivity {
                 selectedFragmentFlag = true;
                 FragmentClass = AboutFragment.class;
                 break;
+
+            default:
+                return;
         }
 
         try{
@@ -227,7 +234,12 @@ public class CountrySearchActivity extends AppCompatActivity {
             }
         }
         menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
+        String title = menuItem.getTitle().toString();
+        if(title.equals("Home")) {
+            setTitle("Countripedia");
+        } else {
+            setTitle(title);
+        }
         drawerLayout.closeDrawers();
     }
 
@@ -345,6 +357,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                 if(tag != null) {
                     manager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
                 }
+                setTitle("Countripedia");
             } else {
                 recreate();
             }

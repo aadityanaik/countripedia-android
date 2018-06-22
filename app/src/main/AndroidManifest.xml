@@ -31,8 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CountryInfoDisplayActivity"
-            android:configChanges="orientation" />
+            android:name=".CountryInfoDisplayActivity" />
         <activity
             android:name=".MoreInfoActivity"
             android:configChanges="orientation" />

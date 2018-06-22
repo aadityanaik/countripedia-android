@@ -2,6 +2,7 @@ package com.halfwitdevs.countripedia;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Process;
@@ -25,14 +26,23 @@ import java.util.concurrent.ExecutionException;
 public class CountryInfoDisplayFragment extends Fragment {
     Country country;
     BookmarkDatabaseAdapter bookmarkDatabaseAdapter;
+    String countryInfoJson;
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        String countryInfoJson = null;
-        View view = inflater.inflate(R.layout.fragment_country_info_display, container, false);
-        bookmarkDatabaseAdapter = new BookmarkDatabaseAdapter(getActivity(), null, null, 1);
-        setHasOptionsMenu(true);
+        view = inflater.inflate(R.layout.fragment_country_info_display, container, false);
+
+        new Runnable() {
+            @Override
+            public void run() {
+                android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+
+                bookmarkDatabaseAdapter = new BookmarkDatabaseAdapter(getActivity(), null, null, 1);
+                setHasOptionsMenu(true);
+            }
+        }.run();
 
         if (getArguments() != null) {
             countryInfoJson = getArguments().getString("COUNTRYINFO");
@@ -44,6 +54,7 @@ public class CountryInfoDisplayFragment extends Fragment {
                 new ImageLoader((ImageView) view.findViewById(R.id.country_flag_image)).run();
                 final ExpandableInfoListAdapter adapter = new ExpandableInfoListAdapter(getContext(), country.getGroups(), country.getGroupsAndItems());
                 ExpandableListView infoView = view.findViewById(R.id.country_info_exp_list);
+
                 infoView.setAdapter(adapter);
                 infoView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                     @Override

@@ -1,11 +1,16 @@
 package com.halfwitdevs.countripedia;
 
 import android.content.Context;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,6 +89,69 @@ public class ExpandableInfoListAdapter extends BaseExpandableListAdapter {
 
         TextView infoItem = convertView.findViewById(R.id.country_info_item);
         infoItem.setText(infoItemText);
+
+        ImageView touchImg = convertView.findViewById(R.id.touch_icon);
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("prefTheme", false)) {
+            Drawable touchImgDrawable = touchImg.getDrawable();
+            final float[] NEGATIVE = {
+                    -1.0f, 0, 0, 0, 255, // red
+                    0, -1.0f, 0, 0, 255, // green
+                    0, 0, -1.0f, 0, 255, // blue
+                    0, 0, 0, 1.0f, 0  // alpha
+            };
+            touchImgDrawable.setColorFilter(new ColorMatrixColorFilter(NEGATIVE));
+
+            touchImg.setImageDrawable(touchImgDrawable);
+        }
+
+        switch((String) getGroup(groupPosition)) {
+            case "General Info":
+                switch ((infoItemText.indexOf(':') != -1) ? infoItemText.substring(0, infoItemText.indexOf(':')) : infoItemText) {
+                    case "Name":
+                        touchImg.setVisibility(View.VISIBLE);
+                        break;
+
+                    case "Native Name":
+                        touchImg.setVisibility(View.GONE);
+                        break;
+
+                    case "Capital":
+                        touchImg.setVisibility(View.VISIBLE);
+                        break;
+
+                    case "Region":
+                        touchImg.setVisibility(View.VISIBLE);
+                        break;
+
+                    case "Population":
+                        touchImg.setVisibility(View.VISIBLE);
+                        break;
+
+                        default:
+                            touchImg.setVisibility(View.GONE);
+                            break;
+                }
+                break;
+            case "Calling Codes":
+                touchImg.setVisibility(View.VISIBLE);
+                break;
+
+            case "Borders":
+                if(!infoItemText.equals("None")) {
+                    touchImg.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Languages":
+                touchImg.setVisibility(View.VISIBLE);
+                break;
+            case "Currencies":
+                touchImg.setVisibility(View.VISIBLE);
+                break;
+
+                default:
+                    touchImg.setVisibility(View.GONE);
+                    break;
+        }
 
         return convertView;
     }

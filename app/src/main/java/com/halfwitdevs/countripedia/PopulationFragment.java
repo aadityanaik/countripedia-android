@@ -1,8 +1,11 @@
 package com.halfwitdevs.countripedia;
 
 import android.content.Context;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -50,6 +53,18 @@ public class PopulationFragment extends Fragment {
 
         if(args != null) {
             errorView = view.findViewById(R.id.error_img);
+            if(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("prefTheme", false)) {
+                Drawable errImgDrawable = errorView.getDrawable();
+                final float[] NEGATIVE = {
+                        -1.0f, 0, 0, 0, 255, // red
+                        0, -1.0f, 0, 0, 255, // green
+                        0, 0, -1.0f, 0, 255, // blue
+                        0, 0, 0, 1.0f, 0  // alpha
+                };
+                errImgDrawable.setColorFilter(new ColorMatrixColorFilter(NEGATIVE));
+
+                errorView.setImageDrawable(errImgDrawable);
+            }
             countryCode = args.getString("CODE");
             countryName = args.getString("NAME");
 
@@ -100,6 +115,8 @@ public class PopulationFragment extends Fragment {
             try {
                 growthList = (ArrayList) ((ArrayList) growth).get(1);
 
+                System.out.println(distribution);
+
                 for(Object popLvl : growthList) {
                     LinkedTreeMap value = (LinkedTreeMap) popLvl;
                     growthEntries.add(new Entry(Float.parseFloat(value.get("date").toString()),
@@ -136,7 +153,7 @@ public class PopulationFragment extends Fragment {
                 LinearLayout linearLayout = view.findViewById(R.id.graph_layout);
                 linearLayout.setVisibility(View.VISIBLE);
 
-            } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
                 date = 0;
                 // TODO
                 // Show a toast with a proper error message

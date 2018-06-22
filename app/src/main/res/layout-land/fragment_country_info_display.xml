@@ -8,12 +8,14 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:id="@+id/country_flag_image"/>
+        android:id="@+id/country_flag_image"
+        android:padding="3dp"/>
 
     <ExpandableListView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:id="@+id/country_info_exp_list" />
+        android:id="@+id/country_info_exp_list"
+        android:padding="3dp"/>
 
 </LinearLayout>

@@ -19,7 +19,7 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
     BookmarkDatabaseAdapter bookmarkDatabaseAdapter;
     Toolbar toolbar;
 
-    private static final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
+    private static final String TAG_RETAINED_FRAGMENT = "RetainedFragmentInfo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +62,18 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
             super.onPreExecute();
 
             // setting up the progress bar
-            progressFragment = new ProgressFragment();
-            transaction.replace(R.id.fragment_container, progressFragment);
-            transaction.commit();
+            retainedFragment = (RetainedFragment) fragmentManager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+            if(retainedFragment == null) {
+                progressFragment = new ProgressFragment();
+                transaction.replace(R.id.fragment_container, progressFragment);
+                transaction.commit();
+            }
         }
 
         @Override
         protected String doInBackground(String... strings) {
             String jsonString = null;
-            retainedFragment = (RetainedFragment) fragmentManager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+            System.out.println("RETAINED? " + retainedFragment);
             if(retainedFragment == null) {
                 try {
                     jsonString =  new URLHandler(strings[0]).getResponse();
@@ -81,6 +84,7 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
                     return null;
                 }
             } else {
+                System.out.println("Replacing through the retained fragment");
                 jsonString = retainedFragment.getData();
             }
 
@@ -92,6 +96,7 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             toolbar = findViewById(R.id.toolbar);
+            toolbar.setTitle(getIntent().getStringExtra("COUNTRYNAME"));
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -110,6 +115,8 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
