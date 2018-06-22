@@ -39,6 +39,57 @@ public class CountryListFragment extends Fragment {
                         if(array != null) {
                             CountryNames selected = array[position];
                             Intent intent = new Intent(getContext(), CountryInfoDisplayActivity.class);
+
+                            //search stuff
+                /*
+                materialSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+                    @Override
+                    public void onSearchViewShown() {
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    }
+
+                    @Override
+                    public void onSearchViewClosed() {
+
+                    }
+                });
+
+                materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+                    private String searchText = null;
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        Vector<CountryNames> filtered = new Vector<>();
+                        if (newText != null) {
+                            for (CountryNames name : nameList) {
+                                if (name.name.toLowerCase().contains(newText.toLowerCase())) {
+                                    filtered.add(name);
+                                }
+                            }
+                            searchText = newText.toLowerCase();
+                        }
+
+                        Collections.sort(filtered, new Comparator<CountryNames>() {
+                            @Override
+                            public int compare(CountryNames o1, CountryNames o2) {
+                                return Integer.valueOf(o1.name.indexOf(searchText)).compareTo(o2.name.indexOf(searchText));
+                            }
+                        });
+
+                        adapter =
+                                new CountryListAdapter(CountrySearchActivity.this,
+                                        filtered.toArray(new CountryNames[filtered.size()]), getFlags);
+                        countryList.setAdapter(adapter);
+
+                        return true;
+                    }
+                });
+                */
+
                             intent.putExtra("COUNTRYCODE", selected.alpha2Code);
                             intent.putExtra("COUNTRYNAME", selected.name);
                             startActivity(intent);
