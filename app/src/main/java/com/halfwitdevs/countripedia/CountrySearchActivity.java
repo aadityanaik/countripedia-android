@@ -71,6 +71,7 @@ public class CountrySearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_country_search);
 
         navgationDrawerAndToolbar();
+        navigationView.getMenu().getItem(1).setChecked(true);
 
         drawerLayout.closeDrawers();
 
@@ -302,7 +303,43 @@ public class CountrySearchActivity extends AppCompatActivity {
                     public void onSearchViewClosed() {
 
                     }
-                });*/
+                });
+
+                materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+                    private String searchText = null;
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        Vector<CountryNames> filtered = new Vector<>();
+                        if (newText != null) {
+                            for (CountryNames name : nameList) {
+                                if (name.name.toLowerCase().contains(newText.toLowerCase())) {
+                                    filtered.add(name);
+                                }
+                            }
+                            searchText = newText.toLowerCase();
+                        }
+
+                        Collections.sort(filtered, new Comparator<CountryNames>() {
+                            @Override
+                            public int compare(CountryNames o1, CountryNames o2) {
+                                return Integer.valueOf(o1.name.indexOf(searchText)).compareTo(o2.name.indexOf(searchText));
+                            }
+                        });
+
+                        adapter =
+                                new CountryListAdapter(CountrySearchActivity.this,
+                                        filtered.toArray(new CountryNames[filtered.size()]), getFlags);
+                        countryList.setAdapter(adapter);
+
+                        return true;
+                    }
+                });
+                */
 
                 args.putParcelableArray("COUNTRYLIST", countryNamesArray);
                 countryListFragment.setArguments(args);
@@ -313,19 +350,6 @@ public class CountrySearchActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.search_menu, menu);
-        searchItem = menu.findItem(R.id.filter_search);
-        //materialSearchView.setMenuItem(searchItem);       this one is giving a null pointer exception
-        refreshItem = menu.findItem(R.id.referesh_button);
-        return true;
-    }
-    */
 
     @Override
     public void onBackPressed() {
