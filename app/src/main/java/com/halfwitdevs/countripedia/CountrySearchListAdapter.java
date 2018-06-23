@@ -18,10 +18,16 @@ public class CountrySearchListAdapter extends ArrayAdapter<CountryNames> {
     CountryNames country;
     boolean getFlags;
     CountrySearchActivity.ViewHolder viewHolder;
+    CountryNames[] nameArray;
 
     public CountrySearchListAdapter(Context context, CountryNames[] value, boolean loadPics) {
         super(context, R.layout.country_list_row, value);
+        nameArray = value;
         getFlags = loadPics;
+    }
+
+    CountryNames[] getNameArray() {
+        return nameArray;
     }
 
     @NonNull

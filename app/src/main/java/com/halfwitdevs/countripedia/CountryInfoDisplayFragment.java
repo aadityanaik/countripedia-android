@@ -2,7 +2,6 @@ package com.halfwitdevs.countripedia;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Process;
@@ -54,6 +53,8 @@ public class CountryInfoDisplayFragment extends Fragment {
                 new ImageLoader((ImageView) view.findViewById(R.id.country_flag_image)).run();
                 final ExpandableInfoListAdapter adapter = new ExpandableInfoListAdapter(getContext(), country.getGroups(), country.getGroupsAndItems());
                 ExpandableListView infoView = view.findViewById(R.id.country_info_exp_list);
+
+                getActivity().setTitle(country.name);
 
                 infoView.setAdapter(adapter);
                 infoView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -150,10 +151,14 @@ public class CountryInfoDisplayFragment extends Fragment {
                                 break;
 
                             case "Borders":
-                                String countryCode = country.borders[childPosition];
-                                intent = new Intent(getContext(), CountryInfoDisplayActivity.class);
-                                intent.putExtra("COUNTRYCODE", countryCode);
-                                startActivity(intent);
+                                if (country.borders.length > 0) {
+                                    String countryCode = country.borders[childPosition];
+                                    intent = new Intent(getContext(), CountryInfoDisplayActivity.class);
+                                    intent.putExtra("COUNTRYCODE", countryCode);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(getContext(), "No Borders", Toast.LENGTH_SHORT).show();
+                                }
                                 break;
 
                             case "Languages":

@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.data.Entry;
@@ -115,8 +114,6 @@ public class PopulationFragment extends Fragment {
             try {
                 growthList = (ArrayList) ((ArrayList) growth).get(1);
 
-                System.out.println(distribution);
-
                 for(Object popLvl : growthList) {
                     LinkedTreeMap value = (LinkedTreeMap) popLvl;
                     growthEntries.add(new Entry(Float.parseFloat(value.get("date").toString()),
@@ -157,7 +154,8 @@ public class PopulationFragment extends Fragment {
                 date = 0;
                 // TODO
                 // Show a toast with a proper error message
-                System.out.println("THIS IS AN ERROR");
+                Toast.makeText(getContext(), "Unable to retrieve population data:\nThe World Bank may not have information on this country",
+                        Toast.LENGTH_SHORT).show();
                 LinearLayout progressBar = view.findViewById(R.id.prog_circle);
                 progressBar.setVisibility(View.GONE);
                 errorView.setVisibility(View.VISIBLE);

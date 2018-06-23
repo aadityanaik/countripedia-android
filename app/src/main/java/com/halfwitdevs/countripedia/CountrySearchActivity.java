@@ -1,46 +1,29 @@
 package com.halfwitdevs.countripedia;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.preference.PreferenceFragment;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.net.MalformedURLException;
-import java.sql.Ref;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
 
 public class CountrySearchActivity extends AppCompatActivity {
     public static boolean startInSettings = false;
@@ -340,5 +323,18 @@ public class CountrySearchActivity extends AppCompatActivity {
     public static class ViewHolder {
         public TextView countryTextView;
         public ImageView flagIcon;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
+
+        if (fragment.getClass() == BookmarkFragment.class) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.list_fragment_container, new BookmarkFragment())
+                    .commit();
+        }
     }
 }

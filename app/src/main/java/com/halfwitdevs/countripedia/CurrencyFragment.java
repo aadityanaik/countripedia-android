@@ -1,9 +1,6 @@
 package com.halfwitdevs.countripedia;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -116,7 +112,6 @@ public class CurrencyFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            System.out.println(s);
 
             if (s != null) {
                 convLayout.setVisibility(View.VISIBLE);
@@ -166,6 +161,16 @@ public class CurrencyFragment extends Fragment {
 
                 lineChart.setDrawBorders(false);
                 lineChart.setAutoScaleMinMaxEnabled(true);
+
+                if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("prefTheme", false)) {
+                    lineChart.setBorderColor(Color.WHITE);
+                    leftAxis.setTextColor(Color.WHITE);
+                    xAxis.setTextColor(Color.WHITE);
+                    lineChart.getLegend().setTextColor(Color.WHITE);
+                } else {
+                    dataSet.setColor(Color.BLUE);
+                }
+
 
                 lineChart.setDrawMarkers(true);
                 lineChart.setTouchEnabled(true);

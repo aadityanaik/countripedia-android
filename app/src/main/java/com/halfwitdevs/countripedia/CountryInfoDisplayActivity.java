@@ -73,7 +73,6 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             String jsonString = null;
-            System.out.println("RETAINED? " + retainedFragment);
             if(retainedFragment == null) {
                 try {
                     jsonString =  new URLHandler(strings[0]).getResponse();
@@ -84,7 +83,6 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
                     return null;
                 }
             } else {
-                System.out.println("Replacing through the retained fragment");
                 jsonString = retainedFragment.getData();
             }
 
@@ -96,7 +94,6 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             toolbar = findViewById(R.id.toolbar);
-            toolbar.setTitle(getIntent().getStringExtra("COUNTRYNAME"));
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -131,8 +128,8 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     Intent intent = new Intent(CountryInfoDisplayActivity.this, CountrySearchActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
                     startActivity(intent);
+                    finish();
                     return true;
                 }
             });

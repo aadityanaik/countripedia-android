@@ -47,7 +47,7 @@ public class ReferencesFragment extends Fragment {
         referenceObjects.add(new ReferenceObject("Gson library", "https://www.github.com/google/gson"));
         referenceObjects.add(new ReferenceObject("AndroidSVGLoader", "https://www.github.com/ar-android/AndroidSvgLoader"));
         referenceObjects.add(new ReferenceObject("Material Search View", "https://www.github.com/MiguelCatalan/MaterialSearchView"));
-        referenceObjects.add(new ReferenceObject("Data for Pie Chart", "https://www.github.com/PhilJay/MPAndroidChart"));
+        referenceObjects.add(new ReferenceObject("Chart Illustrations", "https://www.github.com/PhilJay/MPAndroidChart"));
         referenceObjects.add(new ReferenceObject("Data for population graphs", "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-api-documentation"));
     }
 

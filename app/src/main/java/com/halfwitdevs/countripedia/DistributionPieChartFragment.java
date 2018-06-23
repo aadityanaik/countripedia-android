@@ -2,13 +2,13 @@ package com.halfwitdevs.countripedia;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -39,6 +39,12 @@ public class DistributionPieChartFragment extends Fragment {
         Description description = new Description();
         description.setText("Population Distribution of " + args.getString("NAME") + " in " + args.getInt("DATE"));
         description.setTextSize(10);
+
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("prefTheme", false)) {
+            description.setTextColor(Color.WHITE);
+            pieChart.getLegend().setTextColor(Color.WHITE);
+            pieChart.setHoleColor(getResources().getColor(R.color.primary_dark_material_dark_dark));
+        }
 
         pieChart.setDescription(description);
 

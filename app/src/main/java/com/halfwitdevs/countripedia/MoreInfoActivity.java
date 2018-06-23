@@ -1,20 +1,8 @@
 package com.halfwitdevs.countripedia;
 
-import android.app.Fragment;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.EntryXComparator;
-import com.google.gson.GsonBuilder;
-import com.google.gson.internal.LinkedTreeMap;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class MoreInfoActivity extends AppCompatActivity {
 
@@ -32,10 +20,14 @@ public class MoreInfoActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
 
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+
         switch (args.getString("ACTION")) {
             case "MAP":
                 MapFragment mapFragment = new MapFragment();
                 mapFragment.setArguments(args);
+
+                toolbar.setTitle("Maps");
 
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -48,6 +40,8 @@ public class MoreInfoActivity extends AppCompatActivity {
                 PopulationFragment populationFragment = new PopulationFragment();
                 populationFragment.setArguments(args);
 
+                toolbar.setTitle("Population graphs");
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.info_container, populationFragment)
@@ -57,6 +51,8 @@ public class MoreInfoActivity extends AppCompatActivity {
             case "RATE":
                 CurrencyFragment currencyFragment = new CurrencyFragment();
                 currencyFragment.setArguments(args);
+
+                toolbar.setTitle("Currency Exchange");
 
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -69,6 +65,8 @@ public class MoreInfoActivity extends AppCompatActivity {
                 LanguageFragment languageFragment = new LanguageFragment();
                 languageFragment.setArguments(args);
 
+                toolbar.setTitle("Language- " + args.getString("LANG"));
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.info_container, languageFragment)
@@ -77,5 +75,15 @@ public class MoreInfoActivity extends AppCompatActivity {
                 break;
         }
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

@@ -1,7 +1,9 @@
 package com.halfwitdevs.countripedia;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,8 +35,6 @@ public class GrowthLineChartFragment extends Fragment {
         Bundle args = getArguments();
         ArrayList<Entry> growthEntries = args.getParcelableArrayList("ENTRIES");
 
-        System.out.println(growthEntries.toString());
-
         final LineChart growthLineChart = view.findViewById(R.id.line_chart);
 
         LineDataSet dataSet = new LineDataSet(growthEntries, "Population");
@@ -64,6 +64,16 @@ public class GrowthLineChartFragment extends Fragment {
 
         growthLineChart.setDrawBorders(false);
         growthLineChart.setAutoScaleMinMaxEnabled(true);
+
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("prefTheme", false)) {
+            growthLineChart.setBorderColor(Color.WHITE);
+            leftAxis.setTextColor(Color.WHITE);
+            xAxis.setTextColor(Color.WHITE);
+            description.setTextColor(Color.WHITE);
+            growthLineChart.getLegend().setTextColor(Color.WHITE);
+        } else {
+            dataSet.setColor(Color.BLUE);
+        }
 
         growthLineChart.setDescription(description);
         growthLineChart.setDrawMarkers(true);

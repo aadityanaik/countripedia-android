@@ -9,7 +9,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/referesh_button"
+        android:id="@+id/refresh_button"
         android:icon="@drawable/ic_refresh_black_24dp"
         android:title="Refresh"
         android:tint="@android:color/white"
