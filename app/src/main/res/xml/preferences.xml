@@ -16,14 +16,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="Connection Settings"
-        android:summary="conections">
-        <SwitchPreference
-            android:key="connections_media_load"
-            android:title="Load media when using mobile data?"
-            android:summary="Media loads only via WiFi if off"
-            android:defaultValue="true" />
-    </PreferenceCategory>
-
 </PreferenceScreen>

@@ -16,9 +16,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -56,8 +58,6 @@ public class CountrySearchActivity extends AppCompatActivity {
         navgationDrawerAndToolbar();
         navigationView.getMenu().getItem(1).setChecked(true);
 
-        drawerLayout.closeDrawers();
-
         if(startInSettings) {
             startInSettings = false;
             android.support.v4.app.Fragment fragment = new SettingsFragment();
@@ -75,24 +75,8 @@ public class CountrySearchActivity extends AppCompatActivity {
                             execute("https://restcountries.eu/rest/v2/all/?fields=name;alpha2Code;flag");
                 }
             } catch (Exception e) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CountrySearchActivity.this);
-                builder.setTitle("Error")
-                        .setMessage("Could not retrieve data\nCheck your Internet connection");
-                builder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        recreate();
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-
-                AlertDialog errorDialog = builder.create();
-                errorDialog.show();
+                Toast.makeText(CountrySearchActivity.this, "Could not connect to the internet",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -117,12 +101,14 @@ public class CountrySearchActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
+        drawerLayout.closeDrawers();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle().onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -190,6 +176,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                 break;
 
             default:
+                drawerLayout.closeDrawers();
                 return;
         }
 
@@ -279,6 +266,9 @@ public class CountrySearchActivity extends AppCompatActivity {
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.list_fragment_container, countryListFragment, TAG_LIST);
                 transaction.commit();
+            } else {
+                Toast.makeText(CountrySearchActivity.this, "Could not connect to the internet",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -330,7 +320,7 @@ public class CountrySearchActivity extends AppCompatActivity {
         super.onResume();
         android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
 
-        if (fragment.getClass() == BookmarkFragment.class) {
+        if (fragment != null && fragment.getClass() == BookmarkFragment.class) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.list_fragment_container, new BookmarkFragment())
