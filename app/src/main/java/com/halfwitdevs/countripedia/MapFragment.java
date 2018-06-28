@@ -62,7 +62,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             }
                         });
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "SHITE", Toast.LENGTH_SHORT).show();
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 5));
                     }
 
@@ -71,8 +70,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 case "CAPITAL":
                     String capName = getArguments().getString("CAPNAME");
                     String countryName = getArguments().getString("COUNTRYNAME");
-
-                    Toast.makeText(getContext(), capName, Toast.LENGTH_SHORT).show();
 
                     ArrayList addresses;
 
