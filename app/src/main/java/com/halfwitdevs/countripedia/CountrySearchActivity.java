@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -58,27 +59,8 @@ public class CountrySearchActivity extends AppCompatActivity {
         navgationDrawerAndToolbar();
         navigationView.getMenu().getItem(1).setChecked(true);
 
-        if(startInSettings) {
-            startInSettings = false;
-            android.support.v4.app.Fragment fragment = new SettingsFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.list_fragment_container, fragment)
-                    .commit();
-            setTitle("Settings");
-        } else {
-            try {
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-                if (activeNetwork.isConnected()) {
-                    new GetCountryList().
-                            execute("https://restcountries.eu/rest/v2/all/?fields=name;alpha2Code;flag");
-                }
-            } catch (Exception e) {
-                Toast.makeText(CountrySearchActivity.this, "Could not connect to the internet",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
+        new GetCountryList().
+                execute("https://restcountries.eu/rest/v2/all/?fields=name;alpha2Code;flag");
     }
 
     private void navgationDrawerAndToolbar() {
@@ -149,9 +131,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                     fragment.setArguments(args);
                     tag = TAG_LIST;
                 } else {
-                    recreate();
-                    drawerLayout.closeDrawers();
-                    return;
+                    FragmentClass = CountryListFragment.class;
                 }
                 break;
             case R.id.settings:
@@ -224,11 +204,6 @@ public class CountrySearchActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            // setting up the progress bar
-            progressFragment = new ProgressFragment();
-            transaction.replace(R.id.list_fragment_container, progressFragment);
-            transaction.commit();
         }
 
         @Override
@@ -236,13 +211,29 @@ public class CountrySearchActivity extends AppCompatActivity {
             String jsonString = null;
             retainedFragment = (RetainedFragment) fragmentManager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
             if(retainedFragment == null) {
-                try {
-                    jsonString =  new URLHandler(strings[0]).getResponse();
+                if(Data.data == null && !startInSettings) {
+                    // setting up the progress bar
+                    progressFragment = new ProgressFragment();
+                    transaction.replace(R.id.list_fragment_container, progressFragment);
+                    transaction.commit();
+                    try {
+                        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                        if(activeNetwork.isConnected()) {
+                            jsonString = new URLHandler(strings[0]).getResponse();
+                            retainedFragment = new RetainedFragment();
+                            Data.data = jsonString;
+                            retainedFragment.setData(jsonString);
+                            fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
+                        }
+                    } catch (Exception e) {
+                        return null;
+                    }
+                } else {
                     retainedFragment = new RetainedFragment();
-                    retainedFragment.setData(jsonString);
+                    jsonString = Data.data;
+                    retainedFragment.setData(Data.data);
                     fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
-                } catch (MalformedURLException e) {
-                    return null;
                 }
             } else {
                 jsonString = retainedFragment.getData();
@@ -255,30 +246,52 @@ public class CountrySearchActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
+            CountryListFragment countryListFragment = new CountryListFragment();
+
             if(s != null) {
                 Gson parser = new Gson();
                 CountryNames[] countryNamesArray = parser.fromJson(s, CountryNames[].class);
-                CountryListFragment countryListFragment = new CountryListFragment();
                 Bundle args = new Bundle();
                 args.putParcelableArray("COUNTRYLIST", countryNamesArray);
                 countryListFragment.setArguments(args);
 
-                transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.list_fragment_container, countryListFragment, TAG_LIST);
-                transaction.commit();
             } else {
                 Toast.makeText(CountrySearchActivity.this, "Could not connect to the internet",
                         Toast.LENGTH_SHORT).show();
+            }
+
+            if(startInSettings) {
+                startInSettings = false;
+                android.support.v4.app.Fragment fragment = new SettingsFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_fragment_container, fragment)
+                        .commit();
+                setTitle("Settings");
+            } else {
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.list_fragment_container, countryListFragment, TAG_LIST);
+                transaction.commit();
             }
         }
     }
 
     @Override
     public void onBackPressed() {
+        Fragment testFragment =
+                getSupportFragmentManager()
+                .findFragmentById(R.id.list_fragment_container);
         if(!selectedFragmentFlag) {
-            super.onBackPressed();
-        }
-        else {
+            if(testFragment != null && testFragment.getClass() == CountryListFragment.class) {
+                if(((CountryListFragment) testFragment).materialSearchView.isSearchOpen()) {
+                    ((CountryListFragment) testFragment).materialSearchView.closeSearch();
+                } else {
+                    super.onBackPressed();
+                }
+            } else {
+                super.onBackPressed();
+            }
+        } else {
             int size = navigationView.getMenu().size();
             for (int i = 0; i < size; i++) {
                 navigationView.getMenu().getItem(i).setChecked(false);
@@ -327,4 +340,8 @@ public class CountrySearchActivity extends AppCompatActivity {
                     .commit();
         }
     }
+}
+
+class Data {
+    static String data = null;
 }

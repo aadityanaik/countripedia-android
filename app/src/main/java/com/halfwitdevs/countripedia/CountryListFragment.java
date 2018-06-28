@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.Vector;
 
 public class CountryListFragment extends Fragment {
-    MaterialSearchView materialSearchView;
+    public MaterialSearchView materialSearchView;
     CountrySearchListAdapter adapter;
     MenuItem refresh;
     @Nullable
@@ -40,6 +40,7 @@ public class CountryListFragment extends Fragment {
             materialSearchView.setBackgroundColor(getResources().getColor(R.color.primary_dark_material_dark_dark));
             materialSearchView.setTextColor(Color.WHITE);
             materialSearchView.setHintTextColor(Color.WHITE);
+            materialSearchView.setBackIcon(getResources().getDrawable(R.drawable.ic_action_navigation_arrow_back_inverted));
         }
 
         setHasOptionsMenu(true);
@@ -102,7 +103,7 @@ public class CountryListFragment extends Fragment {
                         Collections.sort(filtered, new Comparator<CountryNames>() {
                             @Override
                             public int compare(CountryNames o1, CountryNames o2) {
-                                return Integer.valueOf(o1.name.indexOf(searchText)).compareTo(o2.name.indexOf(searchText));
+                                return Integer.valueOf(o1.name.toLowerCase().indexOf(searchText)).compareTo(o2.name.toLowerCase().indexOf(searchText));
                             }
                         });
 
@@ -139,4 +140,6 @@ public class CountryListFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
