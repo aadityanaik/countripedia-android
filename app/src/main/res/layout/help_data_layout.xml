@@ -9,5 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredChildIndicatorLeft"
+        android:paddingStart="?android:expandableListPreferredChildPaddingLeft"
+        android:textSize="16sp"
         />
 </LinearLayout>

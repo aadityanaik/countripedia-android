@@ -35,9 +35,6 @@ public class CountrySearchActivity extends AppCompatActivity {
     Toolbar toolbar;
     NavigationView navigationView;
     public Boolean selectedFragmentFlag;
-    MaterialSearchView materialSearchView;
-    MenuItem searchItem;
-    MenuItem refreshItem;
     //boolean doubleBackToExitPressedOnce = false;        //for Press Back Button Twice
 
     final String TAG_RETAINED_FRAGMENT = "RetainedFragment";
@@ -137,7 +134,6 @@ public class CountrySearchActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.home:
                 selectedFragmentFlag = false;
-
                 RetainedFragment retainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
                 if(retainedFragment != null && retainedFragment.getData() != null) {
                     String s = retainedFragment.getData();

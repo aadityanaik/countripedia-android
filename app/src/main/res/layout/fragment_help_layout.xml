@@ -2,11 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:scrollbars="vertical">
+    <TextView
+        android:id="@+id/helpHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
-
-    -<ExpandableListView
+    <ExpandableListView
+        android:id="@+id/help_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/help_list"/>
+        android:padding="4dp"/>
 </LinearLayout>

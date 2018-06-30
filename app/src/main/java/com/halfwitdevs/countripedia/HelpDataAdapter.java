@@ -86,7 +86,7 @@ public class HelpDataAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.help_topic);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
+        lblListHeader.setTypeface(null, Typeface.NORMAL);
         lblListHeader.setText(headerTitle);
 
         return convertView;
