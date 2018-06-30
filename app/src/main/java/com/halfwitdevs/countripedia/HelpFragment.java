@@ -38,16 +38,32 @@ public class HelpFragment extends Fragment{
         listGroupHeader = new ArrayList<String>();
         listChildData = new HashMap<String, List<String>>();
 
-        listGroupHeader.add("First Look");
-        listGroupHeader.add("Selecting countries");
+        listGroupHeader.add("First Look/Home Screen");
+        listGroupHeader.add("Selecting a Country");
+        listGroupHeader.add("Settings");
+        listGroupHeader.add("Help");
+        listGroupHeader.add("About");
 
         List<String> firstLookData = new ArrayList<String>();
-        firstLookData.add("Welcome");
+        firstLookData.add("List  of Countries");
+        firstLookData.add("Toolbar");
 
         List<String> selectingCountriesData = new ArrayList<String>();
         selectingCountriesData.add("Country");
 
+        List<String> settingsData = new ArrayList<String>();
+        settingsData.add("Switch Theme");
+
+        List<String> helpData = new ArrayList<String>();
+        helpData.add("Help is the silent guide of this app, and is a helpful one at that.");
+
+        List<String> aboutData = new ArrayList<String>();
+        aboutData.add("We tell you about the app here. And us. We love sharing.");
+
         listChildData.put(listGroupHeader.get(0), firstLookData);
         listChildData.put(listGroupHeader.get(1), selectingCountriesData);
+        listChildData.put(listGroupHeader.get(2), settingsData);
+        listChildData.put(listGroupHeader.get(3), helpData);
+        listChildData.put(listGroupHeader.get(4), aboutData);
     }
 }
