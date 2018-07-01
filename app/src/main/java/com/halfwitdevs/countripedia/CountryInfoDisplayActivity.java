@@ -150,39 +150,7 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
                 }
             });
         }
-/*
-        int bookmarkID = 103;
-        if (menu.findItem(bookmarkID) == null) {
-            final MenuItem bookmark = menu.add(Menu.NONE, bookmarkID, 3, "Bookmark");
 
-            Bundle bundle = getIntent().getExtras();
-            final String alpha2code = bundle.getString("COUNTRYCODE").toString();
-            final String countryName = bundle.getString("COUNTRYNAME").toString();
-
-            if (!bookmarkDatabaseAdapter.checkIfPresent(countryName)) {
-                bookmark.setIcon(R.drawable.ic_bookmark_border_black_24dp);
-            } else {
-                bookmark.setIcon(R.drawable.ic_bookmark_black_24dp);
-            }
-            bookmark.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_WITH_TEXT | MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-            bookmark.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    final BookmarkObject bookmarkObject = new BookmarkObject(alpha2code, countryName);
-                    if (!bookmarkDatabaseAdapter.checkIfPresent(countryName)) {
-                        bookmarkDatabaseAdapter.addCountry(bookmarkObject);
-                        Toast.makeText(CountryInfoDisplayActivity.this, "Bookmark added!", Toast.LENGTH_SHORT).show();
-                        bookmark.setIcon(R.drawable.ic_bookmark_black_24dp);
-                    } else {
-                        bookmarkDatabaseAdapter.deleteCountry(countryName);
-                        Toast.makeText(CountryInfoDisplayActivity.this, "Bookmark removed!", Toast.LENGTH_SHORT).show();
-                        bookmark.setIcon(R.drawable.ic_bookmark_border_black_24dp);
-                    }
-                    return true;
-                }
-            });
-        }*/
         return super.onPrepareOptionsMenu(menu);
     }
 
