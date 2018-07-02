@@ -30,7 +30,7 @@ public class HelpFragment extends Fragment{
         view = inflater.inflate(R.layout.fragment_help_layout, container, false);
 
         infoText = view.findViewById(R.id.help_header);
-        infoText.setText("Welcome to help manual. Tap on the following topic sections to expand them and know more about countripedia!");
+        infoText.setText("Welcome to help manual. Tap on the following topic sections to expand them and know more about Countripedia!");
         expandableListView = (ExpandableListView)view.findViewById(R.id.help_list);
         prepareList();
         helpDataAdapter = new HelpDataAdapter(getActivity(), listGroupHeader, listChildData);
@@ -52,12 +52,12 @@ public class HelpFragment extends Fragment{
         listGroupHeader.add("About");
 
         List<String> firstLookData = new ArrayList<String>();
-        firstLookData.add("\tList  of Countries\n\n" +
-                "When Countripedia starts up, a list of all countries shows up in alphabetical order. You can" +
+        firstLookData.add("List  of Countries\n\n" +
+                "\tWhen Countripedia starts up, a list of all countries shows up in alphabetical order. You can" +
                 " tap on any country of your choice to select it. You also have the ability to scroll through the list of countries to find" +
-                " and select the country of  your choice. \nAnother wa of searching for any country is to use the search button available on" +
-                " the toolbar.\n\n" +
-                "\tToolbar\n\n" +
+                " and select the country of  your choice. \n\tAnother way of searching for any country is to use the search button available on" +
+                " the toolbar.\n\n\n" +
+                "Toolbar\n\n" +
                 "Three icons occupy the toolbar. They are the:" +
                 "\n\tThe Search Icon on the right most side of the screen" +
                 "\n\tThe Refresh Icon to the immediate left of the Search Icon, which on tapping refreshes the list." +

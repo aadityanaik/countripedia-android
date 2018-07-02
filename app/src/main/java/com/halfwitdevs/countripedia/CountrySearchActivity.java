@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -207,7 +208,7 @@ public class CountrySearchActivity extends AppCompatActivity {
             String jsonString = null;
             retainedFragment = (RetainedFragment) fragmentManager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
             if(retainedFragment == null) {
-                if(Data.data == null && !startInSettings) {
+                if(ListData.data == null && !startInSettings) {
                     // setting up the progress bar
                     progressFragment = new ProgressFragment();
                     transaction.replace(R.id.list_fragment_container, progressFragment);
@@ -218,7 +219,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                         if(activeNetwork.isConnected()) {
                             jsonString = new URLHandler(strings[0]).getResponse();
                             retainedFragment = new RetainedFragment();
-                            Data.data = jsonString;
+                            ListData.data = jsonString;
                             retainedFragment.setData(jsonString);
                             fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
                         }
@@ -227,8 +228,8 @@ public class CountrySearchActivity extends AppCompatActivity {
                     }
                 } else {
                     retainedFragment = new RetainedFragment();
-                    jsonString = Data.data;
-                    retainedFragment.setData(Data.data);
+                    jsonString = ListData.data;
+                    retainedFragment.setData(ListData.data);
                     fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
                 }
             } else {
@@ -277,7 +278,9 @@ public class CountrySearchActivity extends AppCompatActivity {
         Fragment testFragment =
                 getSupportFragmentManager()
                 .findFragmentById(R.id.list_fragment_container);
-        if(!selectedFragmentFlag) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+        } else if(!selectedFragmentFlag) {
             if(testFragment != null && testFragment.getClass() == CountryListFragment.class) {
                 if(((CountryListFragment) testFragment).materialSearchView.isSearchOpen()) {
                     ((CountryListFragment) testFragment).materialSearchView.closeSearch();
@@ -338,6 +341,6 @@ public class CountrySearchActivity extends AppCompatActivity {
     }
 }
 
-class Data {
+class ListData {
     static String data = null;
 }

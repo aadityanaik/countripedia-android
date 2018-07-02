@@ -8,6 +8,8 @@
         android:id="@+id/help_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="4dp"
         android:text="TextView" />
 
     <ExpandableListView

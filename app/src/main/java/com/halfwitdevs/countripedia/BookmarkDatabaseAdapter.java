@@ -51,6 +51,7 @@ public class BookmarkDatabaseAdapter extends SQLiteOpenHelper {
         flag = cursor.getCount() > 0;
 
         cursor.close();
+        sqLiteDatabase.close();
 
         return flag;
     }
@@ -58,6 +59,7 @@ public class BookmarkDatabaseAdapter extends SQLiteOpenHelper {
     public void deleteCountry(String countryName) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL("DELETE FROM " + TABLE_BOOKMARKS + " WHERE " + COLUMN_COUNTRYNAME + "=\"" + countryName + "\";");
+        sqLiteDatabase.close();
     }
 
     public ArrayList<String> dataBaseToString() {

@@ -268,6 +268,13 @@ public class Country {
 
     @SuppressLint("StaticFieldLeak")
     public HashMap<String, ArrayList<String>> getGroupsAndItems() throws ExecutionException, InterruptedException {
+        if(SavedData.c_code == null) {
+            SavedData.c_code = alpha2Code;
+        } else if(!SavedData.c_code.equals(alpha2Code)) {
+            SavedData.c_code = alpha2Code;
+            SavedData.c_summary = null;
+            SavedData.c_neighbours = null;
+        }
         HashMap<String, ArrayList<String>> groupItemMap = new HashMap<>();
 
         ArrayList<String> childItemGeneral = new ArrayList<>();
@@ -315,57 +322,62 @@ public class Country {
 
         groupItemMap.put("Calling Codes", new ArrayList<>(Arrays.asList(callingCodes)));
 
-
         if (borders != null) {
-            try {
-                String[] neighbours = new AsyncTask<Void, Void, String[]>() {
-                    @Override
-                    protected String[] doInBackground(Void... voids) {
-                        Neighbour[] countryNameList;
-                        HttpsURLConnection connection = null;
-                        try {
-                            StringBuilder borderCodes = new StringBuilder();
-                            for (String border : borders) {
-                                borderCodes.append(border).append(";");
-                            }
+            if(SavedData.c_neighbours == null) {
+                try {
+                    String[] neighbours = new AsyncTask<Void, Void, String[]>() {
+                        @Override
+                        protected String[] doInBackground(Void... voids) {
+                            Neighbour[] countryNameList;
+                            HttpsURLConnection connection = null;
+                            try {
+                                StringBuilder borderCodes = new StringBuilder();
+                                for (String border : borders) {
+                                    borderCodes.append(border).append(";");
+                                }
 
-                            connection = (HttpsURLConnection) new URL("https://restcountries.eu/rest/v2/alpha?codes=" + borderCodes.toString() + "&fields=name").openConnection();
-                            connection.setRequestMethod("GET");
-                            connection.setRequestProperty("Accept", "application/json");
-                            connection.setConnectTimeout(5000);
-                            connection.setReadTimeout(5000);
-                            Scanner input = new Scanner
-                                    (new InputStreamReader(connection.getInputStream()));
+                                connection = (HttpsURLConnection) new URL("https://restcountries.eu/rest/v2/alpha?codes=" + borderCodes.toString() + "&fields=name").openConnection();
+                                connection.setRequestMethod("GET");
+                                connection.setRequestProperty("Accept", "application/json");
+                                connection.setConnectTimeout(5000);
+                                connection.setReadTimeout(5000);
+                                Scanner input = new Scanner
+                                        (new InputStreamReader(connection.getInputStream()));
 
-                            StringBuilder jsonString = new StringBuilder();
+                                StringBuilder jsonString = new StringBuilder();
 
-                            while (input.hasNextLine()) {
-                                jsonString.append(input.nextLine());
-                            }
+                                while (input.hasNextLine()) {
+                                    jsonString.append(input.nextLine());
+                                }
 
-                            connection.disconnect();
-                            countryNameList = new Gson().fromJson(jsonString.toString(), Neighbour[].class);
-
-                            String[] output = new String[countryNameList.length];
-
-                            for (int i = 0; i < output.length; i++) {
-                                output[i] = countryNameList[i].name;
-                            }
-
-                            return output;
-                        } catch (IOException e) {
-                            if(connection != null) {
                                 connection.disconnect();
+                                countryNameList = new Gson().fromJson(jsonString.toString(), Neighbour[].class);
+
+                                String[] output = new String[countryNameList.length];
+
+                                for (int i = 0; i < output.length; i++) {
+                                    output[i] = countryNameList[i].name;
+                                }
+
+                                return output;
+                            } catch (IOException e) {
+                                if (connection != null) {
+                                    connection.disconnect();
+                                }
+                                return null;
                             }
-                            return null;
                         }
-                    }
-                }.execute().get();
+                    }.execute().get();
 
-                groupItemMap.put("Borders", new ArrayList<>(Arrays.asList(neighbours)));
-
-            } catch (Exception e) {
-                groupItemMap.put("Borders", new ArrayList<>(Collections.singletonList("None")));
+                    groupItemMap.put("Borders", new ArrayList<>(Arrays.asList(neighbours)));
+                    SavedData.c_neighbours = neighbours;
+                } catch (Exception e) {
+                    groupItemMap.put("Borders", new ArrayList<>(Collections.singletonList("None")));
+                    SavedData.c_neighbours = new String[1];
+                    SavedData.c_neighbours[0] = "None";
+                }
+            } else {
+                groupItemMap.put("Borders", new ArrayList<>(Arrays.asList(SavedData.c_neighbours)));
             }
         } else {
             groupItemMap.put("Borders", new ArrayList<>(Collections.singletonList("None")));
@@ -399,9 +411,13 @@ public class Country {
 
         groupItemMap.put("Internet Domains", new ArrayList<>(Arrays.asList(topLevelDomain)));
 
-        Summary summary = new Summary();
-        summary.setSummary(name, nativeName);
-        groupItemMap.put("Summary", new ArrayList<>(Collections.singletonList(summary.getSummary())));
+        if(SavedData.c_summary == null) {
+            Summary summary = new Summary();
+            summary.setSummary(name, nativeName);
+            String countrySummary = summary.getSummary();
+            SavedData.c_summary = countrySummary;
+        }
+        groupItemMap.put("Summary", new ArrayList<>(Collections.singletonList(SavedData.c_summary)));
 
         return groupItemMap;
     }
@@ -461,4 +477,10 @@ public class Country {
 
         return info.toString();
     }
+}
+
+class SavedData {
+    static String c_code = null;
+    static String c_summary = null;
+    static String[] c_neighbours = null;
 }
