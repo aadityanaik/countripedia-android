@@ -43,6 +43,7 @@ public class HelpFragment extends Fragment{
         listChildData = new HashMap<String, List<String>>();
 
         listGroupHeader.add("First Look/Home Screen");
+        listGroupHeader.add("Looking up all information");
         listGroupHeader.add("Using Search");
         listGroupHeader.add("Using the Navigation Drawer");
         listGroupHeader.add("Home: Go back to start page");
@@ -64,6 +65,33 @@ public class HelpFragment extends Fragment{
                 "\n\tThe Hamburger Icon(Navigation Drawer) to the leftmost side of the screen" +
                 "\n\nUsing the search icon and the navigation drawer is further described in their respective sections.");
 
+        List<String> infoDisplayData = new ArrayList<String>();
+        infoDisplayData.add("Upon tapping on a country, you are presented with a page displaying information." +
+                "\nYou have 9 sections:\n\nGeneral Info" +
+                "\nPressing on general info will show some information about the country. The section that can display more information" +
+                " have an icon indicating the same, on the right hand side." +
+                "\n\nSummary" +
+                "\nTapping on summary will give you a detailed summary of the country." +
+                "\n\nCodes" +
+                "\nTapping on codes will give you information about the country codes." +
+                "\n\nCalling Codes" +
+                "\nTapping on calling codes will give you the international calling codes to that country." +
+                " Tapping on the code will open the dialer app with the code already entered." +
+                "\n\nBorders" +
+                "\nTapping on borders will show a list of neighbouring countries. Tapping on those will take you to a page which will" +
+                " display information for that country." +
+                "\n\nLanguages" +
+                "\nTapping on languages will show the list of official languages of that country. Tapping on any of those languages will" +
+                " display information about that language." +
+                "\n\nCurrencies" +
+                "\nTapping on currencies will show the list of currencies of that country. Tapping on any currency will take youto the currency" +
+                " converter, which has a graph displaying the values of the currency and the current value as of that day, all with respect to the" +
+                " Indian Rupee(INR)." +
+                "\n\nAlternate Names" +
+                "\nTapping on alternate names will show the list of alternate names of that country." +
+                "\n\nInternet Domains" +
+                "\nTapping on internet domains will show the list of top level domains of that country.");
+
         List<String> searchingCountriesData = new ArrayList<String>();
         searchingCountriesData.add("Pressing the search icon on the toolbar brigs up search." +
                 " Type in the country name in the search area. Even entering a single character" +
@@ -71,7 +99,7 @@ public class HelpFragment extends Fragment{
                 " characters wll further filter out the list.");
 
         List<String> navDrawerData = new ArrayList<String>();
-        navDrawerData.add("Tapping on the haburger icon opens up the navigation drawer. The navigation drawer presents a lot of options," +
+        navDrawerData.add("Tapping on the hamburger icon(the three horizontal lines stacked on one another) opens up the navigation drawer. The navigation drawer presents a lot of options," +
                 " which are: Home, Settings, Bookmarks, References, Help, About.\nTapping on any of these will open up that" +
                 " particular window.");
 
@@ -96,12 +124,13 @@ public class HelpFragment extends Fragment{
                 " Here we tell you about the app. And us. We love sharing.");
 
         listChildData.put(listGroupHeader.get(0), firstLookData);
-        listChildData.put(listGroupHeader.get(1), searchingCountriesData);
-        listChildData.put(listGroupHeader.get(2), navDrawerData);
-        listChildData.put(listGroupHeader.get(3), homeData);
-        listChildData.put(listGroupHeader.get(4), settingsData);
-        listChildData.put(listGroupHeader.get(5), navDrawerBookmarksData);
-        listChildData.put(listGroupHeader.get(6), helpData);
-        listChildData.put(listGroupHeader.get(7), aboutData);
+        listChildData.put(listGroupHeader.get(1), infoDisplayData);
+        listChildData.put(listGroupHeader.get(2), searchingCountriesData);
+        listChildData.put(listGroupHeader.get(3), navDrawerData);
+        listChildData.put(listGroupHeader.get(4), homeData);
+        listChildData.put(listGroupHeader.get(5), settingsData);
+        listChildData.put(listGroupHeader.get(6), navDrawerBookmarksData);
+        listChildData.put(listGroupHeader.get(7), helpData);
+        listChildData.put(listGroupHeader.get(8), aboutData);
     }
 }
