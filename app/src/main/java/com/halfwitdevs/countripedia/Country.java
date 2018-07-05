@@ -100,63 +100,68 @@ class Summary {
         @Override
         protected String doInBackground(String[]... strings) {
             String summaryString = getExtract(strings[0][0]);
-            GsonBuilder builder = new GsonBuilder();
-            Object countrySummary = builder.create().fromJson(summaryString, Object.class);
+            try {
+                GsonBuilder builder = new GsonBuilder();
+                Object countrySummary = builder.create().fromJson(summaryString, Object.class);
 
-            LinkedTreeMap linkedTreeMap = (LinkedTreeMap) ((LinkedTreeMap) ((LinkedTreeMap) countrySummary).get("query")).get("pages");
-            LinkedTreeMap page = (LinkedTreeMap) linkedTreeMap.get(linkedTreeMap.keySet().toArray()[0]);
+                LinkedTreeMap linkedTreeMap = (LinkedTreeMap) ((LinkedTreeMap) ((LinkedTreeMap) countrySummary).get("query")).get("pages");
+                LinkedTreeMap page = (LinkedTreeMap) linkedTreeMap.get(linkedTreeMap.keySet().toArray()[0]);
 
-            if(page.get("extract") == null) {
-                summaryString = getExtract(strings[0][1]);
-                countrySummary = builder.create().fromJson(summaryString, Object.class);
-                linkedTreeMap = (LinkedTreeMap) ((LinkedTreeMap) ((LinkedTreeMap) countrySummary).get("query")).get("pages");
-                page = (LinkedTreeMap) linkedTreeMap.get(linkedTreeMap.keySet().toArray()[0]);
-            }
-
-            if(page.get("extract") == null) {
-                return "Not Found";
-            } else {
-                ArrayList<Character> arrayList = new ArrayList<>();
-                for (char a : page.get("extract").toString().toCharArray()) {
-                    arrayList.add(a);
+                if (page.get("extract") == null) {
+                    summaryString = getExtract(strings[0][1]);
+                    countrySummary = builder.create().fromJson(summaryString, Object.class);
+                    linkedTreeMap = (LinkedTreeMap) ((LinkedTreeMap) ((LinkedTreeMap) countrySummary).get("query")).get("pages");
+                    page = (LinkedTreeMap) linkedTreeMap.get(linkedTreeMap.keySet().toArray()[0]);
                 }
 
-                int start = 0, end, nest = 0;
+                if (page.get("extract") == null) {
+                    return "Not Found";
+                } else {
+                    ArrayList<Character> arrayList = new ArrayList<>();
+                    for (char a : page.get("extract").toString().toCharArray()) {
+                        arrayList.add(a);
+                    }
 
-                for (int i = 0; i < arrayList.size(); i++) {
-                    char character = arrayList.get(i);
-                    if (nest == 0) {
-                        if (character == '(') {
-                            nest++;
-                            start = i - 1;
-                        }
-                    } else {
-                        if (character == ')') {
-                            nest--;
-                            if (nest == 0) {
-                                end = i;
-                                while (end != start) {
-                                    arrayList.remove(end);
-                                    end--;
-                                }
+                    int start = 0, end, nest = 0;
 
-                                arrayList.remove(start);
-                                i = start;
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        char character = arrayList.get(i);
+                        if (nest == 0) {
+                            if (character == '(') {
+                                nest++;
+                                start = i - 1;
                             }
-                        } else if (character == '(') {
-                            nest++;
+                        } else {
+                            if (character == ')') {
+                                nest--;
+                                if (nest == 0) {
+                                    end = i;
+                                    while (end != start) {
+                                        arrayList.remove(end);
+                                        end--;
+                                    }
+
+                                    arrayList.remove(start);
+                                    i = start;
+                                }
+                            } else if (character == '(') {
+                                nest++;
+                            }
                         }
                     }
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (char a : arrayList) {
+                        stringBuilder.append(a);
+                    }
+
+                    String string = stringBuilder.toString() + "\n\n" + "Taken from the Wikipedia page for " + countryName + " at " + Calendar.getInstance().getTime();
+
+                    return string;
                 }
-
-                StringBuilder stringBuilder = new StringBuilder();
-                for (char a : arrayList) {
-                    stringBuilder.append(a);
-                }
-
-                String string = stringBuilder.toString() + "\n\n" + "Taken from the Wikipedia page for " + countryName + " at " + Calendar.getInstance().getTime();
-
-                return string;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
             }
         }
 

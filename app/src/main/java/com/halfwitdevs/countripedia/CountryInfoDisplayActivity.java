@@ -45,6 +45,10 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
             }
         } catch (NullPointerException e) {
             Toast.makeText(CountryInfoDisplayActivity.this, "Network Error: Check your connection", Toast.LENGTH_SHORT).show();
+            toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
             e.printStackTrace();
         }
 
@@ -72,7 +76,7 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            String jsonString = null;
+            String jsonString;
             if(retainedFragment == null) {
                 try {
                     jsonString =  new URLHandler(strings[0]).getResponse();
@@ -108,6 +112,10 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
                 transaction.replace(R.id.fragment_container, infoDisplayFragment);
                 transaction.commit();
             } else {
+                toolbar = findViewById(R.id.toolbar);
+                setSupportActionBar(toolbar);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
                 Toast.makeText(CountryInfoDisplayActivity.this, "Network Error: Check your connection", Toast.LENGTH_SHORT).show();
             }
         }

@@ -2,6 +2,8 @@ package com.halfwitdevs.countripedia;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +15,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,15 +25,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if(mapFragment != null) {
-            mapFragment.getMapAsync(this);
+        try {
+            ConnectivityManager manager = (ConnectivityManager) getContext().getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            if (info.isConnected()) {
+                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                if (mapFragment != null) {
+                    mapFragment.getMapAsync(this);
+                }
+            } else {
+                Toast.makeText(getContext(), "Network Error: Check your connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (NullPointerException e) {
+            Toast.makeText(getContext(), "Network Error: Check your connection", Toast.LENGTH_SHORT).show();
         }
 
         return view;

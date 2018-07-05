@@ -2,6 +2,8 @@ package com.halfwitdevs.countripedia;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -220,6 +223,22 @@ public class CurrencyFragment extends Fragment {
                 //error
                 progressLayout.setVisibility(View.GONE);
                 error.setVisibility(View.VISIBLE);
+
+                ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager != null) {
+                    NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                    if (activeNetwork != null && activeNetwork.isConnected()) {
+                        Toast.makeText(getContext(), "Unable to retrieve currency data: Some network issue may have occurred",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Unable to connect to the database: Check your Internet connection",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Unable to connect to the database: Check your Internet connection",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
