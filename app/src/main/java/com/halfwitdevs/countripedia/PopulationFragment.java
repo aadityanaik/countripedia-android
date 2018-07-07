@@ -3,6 +3,8 @@ package com.halfwitdevs.countripedia;
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -154,8 +156,25 @@ public class PopulationFragment extends Fragment {
                 date = 0;
                 // TODO
                 // Show a toast with a proper error message
-                Toast.makeText(getContext(), "Unable to retrieve population data:\nThe World Bank may not have information on this country",
-                        Toast.LENGTH_SHORT).show();
+                try {
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                    if (connectivityManager != null) {
+                        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                        if (activeNetwork != null && activeNetwork.isConnected()) {
+                            Toast.makeText(getContext(), "Unable to retrieve population data: The World Bank may not have information on this country or some network issue may have occurred",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Unable to connect to the database: Check your Internet connection",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Unable to connect to the database: Check your Internet connection",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+
                 LinearLayout progressBar = view.findViewById(R.id.prog_circle);
                 progressBar.setVisibility(View.GONE);
                 errorView.setVisibility(View.VISIBLE);
