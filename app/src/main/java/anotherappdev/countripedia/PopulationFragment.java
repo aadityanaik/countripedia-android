@@ -90,7 +90,7 @@ public class PopulationFragment extends Fragment {
                 responseGrowth = new URLHandler(strings[0]).getResponse();
                 responseDistribution = new URLHandler(strings[1]).getResponse();
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+
             }
             return new String[]{responseGrowth, responseDistribution};
         }
@@ -172,7 +172,6 @@ public class PopulationFragment extends Fragment {
                                 Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e1) {
-                    e1.printStackTrace();
                 }
 
                 LinearLayout progressBar = view.findViewById(R.id.prog_circle);

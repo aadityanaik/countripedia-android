@@ -185,7 +185,7 @@ public class CountryInfoDisplayFragment extends Fragment {
                     }
                 });
             } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
+
             }
         }
 

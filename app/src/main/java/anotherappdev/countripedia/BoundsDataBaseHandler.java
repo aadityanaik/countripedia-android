@@ -19,7 +19,7 @@ public class BoundsDataBaseHandler extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "countries.sqlite";
     public static final String TABLE_BOUNDS_NAME = "COUNTRYBOUNDS";
     private Context myContext;
-    public static final String DATABASE_PATH = "/data/data/com.halfwitdevs.countripedia/databases/";
+    public static final String DATABASE_PATH = "/data/data/anotherappdev.countripedia/databases/";
 
 
 

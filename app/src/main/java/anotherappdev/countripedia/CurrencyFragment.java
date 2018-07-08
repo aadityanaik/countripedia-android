@@ -107,7 +107,7 @@ public class CurrencyFragment extends Fragment {
 
                 return results;
             } catch (IOException e) {
-                e.printStackTrace();
+
                 return null;
             }
         }

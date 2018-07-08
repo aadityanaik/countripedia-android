@@ -92,7 +92,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 .title(capName + "," + countryName));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(capLocation, 12));
                     } catch (IOException e) {
-                        e.printStackTrace();
+
                     }
 
                     break;
@@ -113,7 +113,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             .title(rgnName));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(regionLocation, 3));
                     } catch (IOException e) {
-                        e.printStackTrace();
+
                     } catch (IndexOutOfBoundsException e) {
 
                     }

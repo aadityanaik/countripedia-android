@@ -95,7 +95,7 @@ public class LanguageFragment extends Fragment {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -160,7 +160,7 @@ public class LanguageFragment extends Fragment {
                     return stringBuilder.toString().replaceAll("\n", "\n\n");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+
                 return null;
             }
         }

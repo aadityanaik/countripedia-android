@@ -116,7 +116,7 @@ public class CountryListFragment extends Fragment {
                     }
                 });
             } catch(NullPointerException e) {
-                e.printStackTrace();
+
 
             }
         }

@@ -91,7 +91,7 @@ class Summary {
                     summaryString.append(input.nextLine());
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+
             } finally {
                 if(connection != null) {
                     connection.disconnect();
@@ -164,7 +164,7 @@ class Summary {
                     return string;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+
                 return null;
             }
         }

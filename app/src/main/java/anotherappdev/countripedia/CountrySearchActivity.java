@@ -156,7 +156,7 @@ public class CountrySearchActivity extends AppCompatActivity {
                 fragment = (android.support.v4.app.Fragment)FragmentClass.newInstance();
         }
         catch (Exception e) {
-            e.printStackTrace();
+
         }
         if(tag != null) {
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
