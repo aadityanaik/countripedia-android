@@ -63,7 +63,7 @@ public class CountrySearchListAdapter extends ArrayAdapter<CountryNames> {
                         .setPlaceHolder(R.drawable.progress_animation, R.drawable.progress_animation)
                         .load(country.flag, viewHolder.flagIcon);
             } else {
-                viewHolder.flagIcon.setImageResource(R.mipmap.flag);
+                viewHolder.flagIcon.setImageResource(R.drawable.flag);
             }
         }
     }
