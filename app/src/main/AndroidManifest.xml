@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/flag"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/flagcircle"
+        android:roundIcon="@mipmap/icon_circular"
         android:supportsRtl="true"
         android:theme="@style/LightAppTheme">
         <uses-library android:name="com.google.android.maps" />
