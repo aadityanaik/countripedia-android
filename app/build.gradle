@@ -1,9 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'releasekey'
+            keyPassword 'release1123@countri_pedia'
+            storeFile file('D:/AndroidStudioProjects/Countripedia/keystore.jks')
+            storePassword 'countri747pedia889'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.halfwitdevs.countripedia"
+        applicationId "anotherappdev.countripedia"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
@@ -14,12 +22,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:preference-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
