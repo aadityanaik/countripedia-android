@@ -38,6 +38,11 @@
             android:title="About"
             android:icon="@drawable/ic_info_outline_black_24dp" />
 
+        <item
+            android:id="@+id/support"
+            android:icon="@drawable/ic_plus_one_black_48dp"
+            android:title="Support Us" />
+
     </group>
 
 </menu>

@@ -146,6 +146,11 @@ public class CountrySearchActivity extends AppCompatActivity {
                 FragmentClass = AboutFragment.class;
                 break;
 
+            case R.id.support:
+                selectedFragmentFlag = true;
+                FragmentClass = SupportUsFragment.class;
+                break;
+
             default:
                 drawerLayout.closeDrawers();
                 return;
