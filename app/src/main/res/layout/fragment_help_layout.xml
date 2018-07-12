@@ -10,7 +10,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:padding="4dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp" />
 
     <ExpandableListView
         android:id="@+id/help_list"

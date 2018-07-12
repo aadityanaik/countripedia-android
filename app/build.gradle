@@ -8,6 +8,12 @@ android {
             storeFile file('D:/AndroidStudioProjects/Countripedia/keystore.jks')
             storePassword 'countri747pedia889'
         }
+        config_secondary {
+            keyAlias 'releasekey'
+            keyPassword 'release1123@countri_pedia'
+            storeFile file('G:/SoftwareTypeB/AndroidStudio/CountripediaGCV/countripedia/keystore.jks')
+            storePassword 'countri747pedia889'
+        }
     }
     compileSdkVersion 27
     defaultConfig {
@@ -22,6 +28,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config_secondary
+        }
+        debug {
             signingConfig signingConfigs.config
         }
     }
