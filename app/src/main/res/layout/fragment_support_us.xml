@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="To stay in touch with us, follow us on any of these links-"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="4">
+
+        <ImageButton
+            android:id="@+id/btn_fb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons8_facebook_96" />
+
+        <ImageButton
+            android:id="@+id/btn_twit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons8_twitter_96" />
+
+        <ImageButton
+            android:id="@+id/btn_gplus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons8_google_plus_96" />
+
+        <ImageButton
+            android:id="@+id/btn_git"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons8_github_96" />
+
+    </LinearLayout>
+    <!--
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp"
+            android:text="Also, if you have some money to spare, feel free to become a patron at Patreon.com by clicking the button below"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Become a Patron!"
+            android:id="@+id/patreon"/>
+            -->
+
+</LinearLayout>
