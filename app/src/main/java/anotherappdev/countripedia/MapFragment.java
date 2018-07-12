@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,10 +29,13 @@ import java.util.Locale;
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
+    LinearLayout mapLayout, progress;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        mapLayout = view.findViewById(R.id.map_layout);
+        progress = view.findViewById(R.id.prog_circle);
         try {
             ConnectivityManager manager = (ConnectivityManager) getContext().getSystemService(CONNECTIVITY_SERVICE);
             NetworkInfo info = manager.getActiveNetworkInfo();
@@ -118,6 +122,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     }
             }
+
+            progress.setVisibility(View.GONE);
+            mapLayout.setVisibility(View.VISIBLE);
         }
     }
 }
