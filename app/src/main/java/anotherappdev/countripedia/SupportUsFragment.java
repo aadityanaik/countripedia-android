@@ -53,7 +53,7 @@ public class SupportUsFragment extends Fragment implements View.OnClickListener 
                 break;
 
             case R.id.btn_twit:
-                link = "https://www.twitter.com/anotherapplicationdeveloper";
+                link = "https://twitter.com/anotherappdev";
                 break;
 
             case R.id.btn_gplus:
