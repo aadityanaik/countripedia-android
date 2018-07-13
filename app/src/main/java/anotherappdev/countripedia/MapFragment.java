@@ -80,7 +80,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     } catch (Exception e) {
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 5));
                     }
-
+                    ((MoreInfoActivity) getActivity()).setActTitle("Maps- " + name);
                     break;
 
                 case "CAPITAL":
@@ -98,7 +98,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     } catch (IOException e) {
 
                     }
-
+                    ((MoreInfoActivity) getActivity()).setActTitle("Maps- " + capName + ", " + countryName);
                     break;
 
                 case "REGION":
@@ -121,6 +121,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     } catch (IndexOutOfBoundsException e) {
 
                     }
+
+                    ((MoreInfoActivity) getActivity()).setActTitle("Maps- " + rgnName);
+                    break;
             }
 
             progress.setVisibility(View.GONE);

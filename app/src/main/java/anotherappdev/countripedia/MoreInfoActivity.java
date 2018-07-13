@@ -81,6 +81,10 @@ public class MoreInfoActivity extends AppCompatActivity {
 
     }
 
+    public void setActTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

@@ -112,7 +112,7 @@ public class CountryInfoDisplayFragment extends Fragment {
                                         String rgn = "";
 
                                         if (country.subregion != null && !country.subregion.equals("")) {
-                                            rgn += country.subregion + ",";
+                                            rgn += country.subregion + ", ";
                                         }
 
                                         rgn += country.region;
