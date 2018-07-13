@@ -69,7 +69,9 @@ public class AboutFragment extends Fragment {
                     profileMap.put("Github", "https://www.github.com/rincemust/");
                 } else if (i == 1) {
                     // Its-a me, Aditya
-                    profileMap.put("Something", "https://www.google.com");
+                    profileMap.put("Github", "https://github.com/thealphaversion");
+                    profileMap.put("Instagram", "https://www.instagram.com/thealphaversion");
+                    profileMap.put("AngelList", "https://angel.co/aditya-chakraborti");
                 }
 
                 profileListArrayAdapter.addAll(profileMap.keySet());
