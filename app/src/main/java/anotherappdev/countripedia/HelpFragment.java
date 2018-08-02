@@ -39,8 +39,8 @@ public class HelpFragment extends Fragment{
     }
 
     public void prepareList(){
-        listGroupHeader = new ArrayList<String>();
-        listChildData = new HashMap<String, List<String>>();
+        listGroupHeader = new ArrayList<>();
+        listChildData = new HashMap<>();
 
         listGroupHeader.add("First Look/Home Screen");
         listGroupHeader.add("Looking up all information");
@@ -52,7 +52,7 @@ public class HelpFragment extends Fragment{
         listGroupHeader.add("Help");
         listGroupHeader.add("About");
 
-        List<String> firstLookData = new ArrayList<String>();
+        List<String> firstLookData = new ArrayList<>();
         firstLookData.add("List  of Countries\n\n" +
                 "\tWhen Countripedia starts up, a list of all countries shows up in alphabetical order. You can" +
                 " tap on any country of your choice to select it. You also have the ability to scroll through the list of countries to find" +
@@ -65,10 +65,10 @@ public class HelpFragment extends Fragment{
                 "\n\tThe Hamburger Icon(Navigation Drawer) to the leftmost side of the screen" +
                 "\n\nUsing the search icon and the navigation drawer is further described in their respective sections.");
 
-        List<String> infoDisplayData = new ArrayList<String>();
+        List<String> infoDisplayData = new ArrayList<>();
         infoDisplayData.add("Upon tapping on a country, you are presented with a page displaying information." +
                 "\nYou have 9 sections:\n\nGeneral Info" +
-                "\nPressing on general info will show some information about the country. The section that can display more information" +
+                "\nPressing on general info will show some information about the country. The sections that can display more information" +
                 " have an icon indicating the same, on the right hand side." +
                 "\n\nSummary" +
                 "\nTapping on summary will give you a detailed summary of the country." +
@@ -92,34 +92,33 @@ public class HelpFragment extends Fragment{
                 "\n\nInternet Domains" +
                 "\nTapping on internet domains will show the list of top level domains of that country.");
 
-        List<String> searchingCountriesData = new ArrayList<String>();
-        searchingCountriesData.add("Pressing the search icon on the toolbar brigs up search." +
+        List<String> searchingCountriesData = new ArrayList<>();
+        searchingCountriesData.add("Pressing the search icon on the toolbar brings up search." +
                 " Type in the country name in the search area. Even entering a single character" +
-                " will start filtering out countries that do not start with that letter. Entering more" +
+                " will start filtering out countries that do not contain that letter. Entering more" +
                 " characters wll further filter out the list.");
 
-        List<String> navDrawerData = new ArrayList<String>();
+        List<String> navDrawerData = new ArrayList<>();
         navDrawerData.add("Tapping on the hamburger icon(the three horizontal lines stacked on one another) opens up the navigation drawer. The navigation drawer presents a lot of options," +
                 " which are: Home, Settings, Bookmarks, References, Help, About.\nTapping on any of these will open up that" +
                 " particular window.");
 
-        List<String> homeData = new ArrayList<String>();
-        homeData.add("Pressing home on the navigation drawer takes you back to the initial start page. Pressing the back button on your phone" +
-                " also takes you back to the home page.");
+        List<String> homeData = new ArrayList<>();
+        homeData.add("Pressing home on the navigation drawer takes you back to the initial start page.");
 
-        List<String> settingsData = new ArrayList<String>();
-        settingsData.add("Pressing the settings option on the navigation drawer takes you to the settings mennu. In the settings menu" +
+        List<String> settingsData = new ArrayList<>();
+        settingsData.add("Pressing the settings option on the navigation drawer takes you to the settings menu. In the settings menu" +
                 " you get the option to choose between a light or a dark theme. You can do this by tapping on the switch theme switch.");
 
-        List<String> navDrawerBookmarksData = new ArrayList<String>();
+        List<String> navDrawerBookmarksData = new ArrayList<>();
         navDrawerBookmarksData.add("Pressing bookmarks on the navigation drawer takes you to the page where your bookmarks are stored." +
                 " You can tap on the countries in the bookmarks list and know all about them.");
 
-        List<String> helpData = new ArrayList<String>();
+        List<String> helpData = new ArrayList<>();
         helpData.add("Help is the silent guide of this app, always here to help. Pressing help on the navigation drawer takes you to the" +
                 " help page.");
 
-        List<String> aboutData = new ArrayList<String>();
+        List<String> aboutData = new ArrayList<>();
         aboutData.add("Pressing about on the navigation drawer takes you to the About page of the app." +
                 " Here we tell you about the app. And us. We love sharing.");
 

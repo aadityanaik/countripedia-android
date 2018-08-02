@@ -138,6 +138,8 @@ public class ExpandableInfoListAdapter extends BaseExpandableListAdapter {
             case "Borders":
                 if(!infoItemText.equals("None")) {
                     touchImg.setVisibility(View.VISIBLE);
+                } else {
+                    touchImg.setVisibility(View.GONE);
                 }
                 break;
             case "Languages":

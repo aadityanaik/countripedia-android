@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -162,6 +163,9 @@ public class CurrencyFragment extends Fragment {
                 rightAxis.setDrawLabels(false);
                 rightAxis.setDrawGridLines(false);
 
+                Description description = new Description();
+                description.setText("Currency exchange rate " + currencyCode + " vs. INR (Indian Rupee)");
+
                 lineChart.setDrawBorders(false);
                 lineChart.setAutoScaleMinMaxEnabled(true);
 
@@ -169,6 +173,7 @@ public class CurrencyFragment extends Fragment {
                     lineChart.setBorderColor(Color.WHITE);
                     leftAxis.setTextColor(Color.WHITE);
                     xAxis.setTextColor(Color.WHITE);
+                    description.setTextColor(Color.WHITE);
                     lineChart.getLegend().setTextColor(Color.WHITE);
                 } else {
                     dataSet.setColor(Color.BLUE);
@@ -176,6 +181,7 @@ public class CurrencyFragment extends Fragment {
 
 
                 lineChart.setDrawMarkers(true);
+                lineChart.setDescription(description);
                 lineChart.setTouchEnabled(true);
                 lineChart.setMarker(new CustomMarkerView(getContext(), R.layout.custom_marker_layout));
                 lineChart.invalidate();
@@ -192,7 +198,7 @@ public class CurrencyFragment extends Fragment {
                     }
                 });
 
-                rate.setText(String.valueOf(rateDouble));
+                rate.setText("Rate- " + String.valueOf(rateDouble));
 
                 input.addTextChangedListener(new TextWatcher() {
                     @Override

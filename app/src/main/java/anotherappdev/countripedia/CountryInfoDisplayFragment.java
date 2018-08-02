@@ -57,6 +57,7 @@ public class CountryInfoDisplayFragment extends Fragment {
                 getActivity().setTitle(country.name);
 
                 infoView.setAdapter(adapter);
+                infoView.expandGroup(0);
                 infoView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                     @Override
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {

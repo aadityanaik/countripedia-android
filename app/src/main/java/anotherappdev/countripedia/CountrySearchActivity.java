@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -190,6 +191,78 @@ public class CountrySearchActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment testFragment =
+                getSupportFragmentManager()
+                        .findFragmentById(R.id.list_fragment_container);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+        } else if (!selectedFragmentFlag) {
+            if (testFragment != null && testFragment.getClass() == CountryListFragment.class) {
+                if (((CountryListFragment) testFragment).materialSearchView.isSearchOpen()) {
+                    ((CountryListFragment) testFragment).materialSearchView.closeSearch();
+                } else {
+                    super.onBackPressed();
+                }
+            } else {
+                super.onBackPressed();
+            }
+        } else {
+            int size = navigationView.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigationView.getMenu().getItem(i).setChecked(false);
+            }
+            navigationView.getMenu().getItem(1).setChecked(true);
+            selectedFragmentFlag = false;
+
+            android.support.v4.app.Fragment fragment;
+            android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
+            String tag = null;
+
+            RetainedFragment retainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
+            if (retainedFragment != null && retainedFragment.getData() != null) {
+                String s = retainedFragment.getData();
+                Gson parser = new Gson();
+                CountryNames[] countryNamesArray = parser.fromJson(s, CountryNames[].class);
+                fragment = new CountryListFragment();
+                Bundle args = new Bundle();
+                args.putParcelableArray("COUNTRYLIST", countryNamesArray);
+                fragment.setArguments(args);
+                tag = TAG_LIST;
+                if (tag != null) {
+                    manager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
+                }
+                setTitle("Countripedia");
+            } else {
+                recreate();
+            }
+        }
+    }
+
+    public static class ViewHolder {
+        public TextView countryTextView;
+        public ImageView flagIcon;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
+
+        if (fragment != null && fragment.getClass() == BookmarkFragment.class) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.list_fragment_container, new BookmarkFragment())
+                    .commit();
+        }
+    }
+
     private class GetCountryList extends AsyncTask<String, Void, String> {
         // using v4 cuz reasons
         RetainedFragment retainedFragment;
@@ -229,7 +302,11 @@ public class CountrySearchActivity extends AppCompatActivity {
                     retainedFragment = new RetainedFragment();
                     jsonString = ListData.data;
                     retainedFragment.setData(ListData.data);
-                    fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
+                    try {
+                        fragmentManager.beginTransaction().add(retainedFragment, TAG_RETAINED_FRAGMENT).commit();
+                    } catch (Exception e) {
+                        retainedFragment = null;
+                    }
                 }
             } else {
                 jsonString = retainedFragment.getData();
@@ -252,8 +329,10 @@ public class CountrySearchActivity extends AppCompatActivity {
                 countryListFragment.setArguments(args);
 
             } else {
-                Toast.makeText(CountrySearchActivity.this, "Could not connect to the internet",
-                        Toast.LENGTH_SHORT).show();
+                if (!startInSettings) {
+                    Toast.makeText(CountrySearchActivity.this, "Could not connect to the internet",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
 
             if(startInSettings) {
@@ -262,80 +341,13 @@ public class CountrySearchActivity extends AppCompatActivity {
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.list_fragment_container, fragment)
-                        .commit();
+                        .commitAllowingStateLoss();
                 setTitle("Settings");
             } else {
                 transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.list_fragment_container, countryListFragment, TAG_LIST);
-                transaction.commit();
+                transaction.commitAllowingStateLoss();
             }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Fragment testFragment =
-                getSupportFragmentManager()
-                .findFragmentById(R.id.list_fragment_container);
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawers();
-        } else if(!selectedFragmentFlag) {
-            if(testFragment != null && testFragment.getClass() == CountryListFragment.class) {
-                if(((CountryListFragment) testFragment).materialSearchView.isSearchOpen()) {
-                    ((CountryListFragment) testFragment).materialSearchView.closeSearch();
-                } else {
-                    super.onBackPressed();
-                }
-            } else {
-                super.onBackPressed();
-            }
-        } else {
-            int size = navigationView.getMenu().size();
-            for (int i = 0; i < size; i++) {
-                navigationView.getMenu().getItem(i).setChecked(false);
-            }
-            navigationView.getMenu().getItem(1).setChecked(true);
-            selectedFragmentFlag = false;
-
-            android.support.v4.app.Fragment fragment;
-            android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
-            String tag = null;
-
-            RetainedFragment retainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG_RETAINED_FRAGMENT);
-            if(retainedFragment != null && retainedFragment.getData() != null) {
-                String s = retainedFragment.getData();
-                Gson parser = new Gson();
-                CountryNames[] countryNamesArray = parser.fromJson(s, CountryNames[].class);
-                fragment = new CountryListFragment();
-                Bundle args = new Bundle();
-                args.putParcelableArray("COUNTRYLIST", countryNamesArray);
-                fragment.setArguments(args);
-                tag = TAG_LIST;
-                if(tag != null) {
-                    manager.beginTransaction().replace(R.id.list_fragment_container, fragment).commit();
-                }
-                setTitle("Countripedia");
-            } else {
-                recreate();
-            }
-        }
-    }
-
-    public static class ViewHolder {
-        public TextView countryTextView;
-        public ImageView flagIcon;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.list_fragment_container);
-
-        if (fragment != null && fragment.getClass() == BookmarkFragment.class) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.list_fragment_container, new BookmarkFragment())
-                    .commit();
         }
     }
 }

@@ -55,19 +55,5 @@
             android:src="@drawable/icons8_github_96" />
 
     </LinearLayout>
-    <!--
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:padding="5dp"
-            android:text="Also, if you have some money to spare, feel free to become a patron at Patreon.com by clicking the button below"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Become a Patron!"
-            android:id="@+id/patreon"/>
-            -->
 
 </LinearLayout>

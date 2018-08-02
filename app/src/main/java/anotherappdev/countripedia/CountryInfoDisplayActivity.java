@@ -117,6 +117,10 @@ public class CountryInfoDisplayActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
                 Toast.makeText(CountryInfoDisplayActivity.this, "Network Error: Check your connection", Toast.LENGTH_SHORT).show();
+
+                transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container, new CountryInfoDisplayFragment());
+                transaction.commit();
             }
         }
     }
