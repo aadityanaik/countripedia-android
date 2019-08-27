@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Countripedia</string>
-    <string name="google_maps_api_key">AIzaSyDFqppIZMWcunv9zSpMiKaCYN5wz39iRp4</string>
+    <string name="google_maps_api_key">Enter your maps API key here</string>
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer Close</string>
     <string name="search">Search</string>
